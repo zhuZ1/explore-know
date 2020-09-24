@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="box">
+        <p id="click-p">你好</p>
+        <p>来啦</p>
+        <p>好的</p>
+        <text>hello啊</text>
+    </div>
+    <script>
+      function traversal(node){
+        if(node && node.nodeType==1){
+          console.log(node.tagName)
+        }
+        let i = 0, childNodes = node.childNodes, item
+        for(;i < childNodes.length;i++){
+          item = childNodes[i]
+          if(item.nodeType==1){
+            // 递归先序遍历子节点
+            traversal(item)
+          }
+        }
+      }
+      let node = document.querySelector('.box')
+      let nodeList = document.querySelectorAll('p')
+
+      console.log(node, nodeList)
+      traversal(node)
+
+      let clickP = document.getElementById('click-p')
+        clickP.addEventListener('click', ()=> {
+          alert('点击了p, 你好')
+        })
+
+      let parNode = document.getElementsByClassName('box')[0]
+      parNode.addEventListener('click', function (event) {
+        alert('点了父盒子')
+      })
+        // addEventListener(event, function(cb), useCapture)
+        // event '字符串'  必须 指定事件名
+        // cb 必须 指定触发事件要执行的函数
+        // useCapture 可选 指定事件是否在 捕获或冒泡阶段执行
+      function A() {
+        this.n = 0
+      }
+      A.prototype.callMe = function () {
+        console.log(this)
+      }
+      let a = new A();
+      document.addEventListener("click", a.callMe);  //undefined
+      // 等同于 document.addEventListener('click', function() { console.log(this) })
+      document.addEventListener("click", () => { a.callMe(); }); //0 // this指向 A
+      // 这里的调用都只是 打印 a.callMe() 的结果
+      document.addEventListener("click", function () { a.callMe(); });  //0
+
+    </script>
+</body>
+</html>
