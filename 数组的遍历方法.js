@@ -67,3 +67,43 @@ let result3 = arr.findIndex(item=>{
   return item > 1
 })
 console.log(result3)
+
+
+// 想到的一个有关分组的问题
+const arrList = [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}]
+function group(arrList, arrLen){
+  const arrs = []
+  arrList.forEach((item, i)=>{
+    let page = Math.floor(i / arrLen) // 当前元素应该放在第几个数组里
+    if(!arrs[page]){  // 新数组还没创建
+      arrs[page] = [] // 创建
+    }
+    arrs[page].push(item) // 已存在就push
+  })
+  return arrs
+}
+console.log(group(arrList, 2))
+
+// forEach 跳出循环的方式
+
+try {
+  let newArr = []
+  console.log('try', arrList)
+  arrList.forEach(item=>{
+    if(item.id==2){
+      throw new Error('break')
+    }
+    newArr.push(item)
+    console.log(newArr)
+  })
+
+} catch (e) {
+    console.log('跳出来')
+  }
+
+  console.log('new')
+
+
+// for...in 循环遍历对象自身的和继承的可枚举属性
+// for...of 内部循环调用的是 symbol.iterator方法
+// 可以用在数组，Set，Map，类数组对象，字符串等

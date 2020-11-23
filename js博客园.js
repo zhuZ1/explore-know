@@ -208,4 +208,3 @@ let newArr = arrObj.reduce((acc, cur)=>{
 console.log(newArr)
 
 
-

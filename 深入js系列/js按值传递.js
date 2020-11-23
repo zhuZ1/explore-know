@@ -7,7 +7,7 @@ function changeV(v){
   console.log(v)
 }
 
-console.log(changeV(value)) // 2
+changeV(value) // 2
 // 参数按值传递，v相当于拷贝了一个value的副本，函数中修改的是副本，所以不会改变原有值
 console.log(value) // 1
 
@@ -19,7 +19,7 @@ function change(o){
   o.a = 2
   console.log(o.a)
 }
-console.log(change(obj)) // 2
+change(obj) // 2
 // 按引用传递： 传递对象的引用，函数内部对函数的任何改变都会影响该对象的值，因为两者引用的是同一个对象
 // 此并非引用传递， 而是共享传递
 console.log(obj.a)  // 2
@@ -29,7 +29,7 @@ function change1(o) {
   console.log(o)
 }
 
-console.log(change1(obj)) // 3
+change1(obj) // 3
 // 这里的obj并不会被修改，说明引用传递是不存在的
 //  共享传递： 传递对象的引用的副本
 console.log(obj.a) // 2

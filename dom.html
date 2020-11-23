@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>一些原生的dom创建方法</title>
+</head>
+<style>
+    #box{
+        height: 20px;
+        width: 20px;
+    }
+    .class-box{
+        background: palevioletred;
+    }
+    .blue{
+        background-color: red;
+    }
+</style>
+<body>
+
+<div id="box">
+
+</div>
+
+<script>
+    let divB = document.getElementById('box')
+    divB.classList.add('class-box')
+    setTimeout(()=>{
+      divB.classList.remove('class-box')
+    }, 2000)
+    divB.classList.toggle('blue')
+    console.log(divB.classList.contains('blue'))
+    // divB.innerHTML = `<p>你好啊</p>`
+    // innerHTML 设置标签内容时，标签会被转译, 获取时 能够获取原标签
+    // innerText 设置标签是什么样就是什么样。获取时只能获取文本
+    console.log(divB.innerText, divB.innerHTML)
+    console.log(divB.getAttribute('id'))
+    let p = document.createElement('p') // 创建标签
+    divB.appendChild(p)  // 插入标签
+    let span = document.createElement('span')
+    divB.insertBefore(span, p) // pNode.insertBefore(cNode, reference)
+    // pNode 插入节点的父节点，cNode 要插入的节点，reference插在哪个节点之前
+    let allDoc = document.getElementsByTagName('*')
+    console.log(Object.prototype.toString.call(allDoc))
+    // 获取所有标签并打印个数
+    function countTag(tags) {
+      let len = tags.length, tagsArr = [], obj = {}
+      for (let i = 0; i < len; i++){
+        tagsArr.push((tags[i].tagName).toLowerCase())
+      }
+      console.log('结构', tagsArr)
+      let len1 = tagsArr.length
+      for(let i = 0; i < len1; i++){
+        if(!obj[tagsArr[i]]){
+          obj[tagsArr[i]] = 1
+        } else {
+          obj[tagsArr[i]]++
+        }
+      }
+      return obj
+    }
+    console.log(countTag(allDoc))
+</script>
+</body>
+</html>

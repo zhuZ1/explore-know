@@ -30,6 +30,8 @@ function flatten3(arr) {
 // 4 es6 的扩展运算符  扁平化一层
 var arr = [1, 2, [3, 4]]
 console.log([].concat(...arr))
+
+// while 循环可以扁平化多层
 function flatten4(arr) {
   while(arr.some(item=>Array.isArray(item))){
     arr = [].concat(...arr)

@@ -343,7 +343,7 @@ var reverse = function (x) {
 
 console.log('反转', reverse(-123))
 
-// 合并两个有序链表
+// 21. 合并两个有序链表
 //链表
 function nodeList(val){
   this.val = val
@@ -555,3 +555,189 @@ var rotate = function (matrix) {
 }
 
 console.log('旋转后的结果', rotate(matrix))
+
+// 35. 搜索插入位置
+// 描述： 给定一个有序数组和一个目标值， 找到目标值返回下标，如果不存在，返回其合适插入的位置
+let arrN = [1, 3, 5, 6]
+// 解法1 遍历
+// var searchInsert = function(nums, target) {
+//   let num = nums.length
+//   if(nums[0] > target) return 0
+//   if(nums[num - 1] < target) return num
+//
+//   for(let i = 0; i < num; i++){
+//     if(nums[i] < target && nums[i+1] > target){
+//       return i+1
+//     } else if(nums[i] == target){
+//       return i
+//     }
+//   }
+// }
+// 解法2 二分查找
+var searchInsert = function(nums, target){
+  let left = 0, right = nums.length - 1
+  while(left <= right){
+    const mid = (left + right) >> 1 // 中间值向下取整
+    if(nums[mid] == target) return mid
+    if(nums[mid] < target){
+      left = mid + 1
+    } else {
+      right = mid - 1
+    }
+  }
+  return left
+}
+
+console.log(searchInsert(arrN, 4))
+
+// 10进制数 9
+// 9 % 2 = 4 ... 1  /  4 % 2 = 2 ...0  /  2 % 2 = 1 ... 0   1 % 2 = 0 ... 1  1001
+// 52 % 2 = 26 ... 0  / 26 % 2 = 13 ... 0 / 13 % 2 = 6 ... 1 / 6 % 2 = 3 ... 0 / 3 % 2 = 1 ... 1 / 1 % 2 = 0 ... 1
+
+// 按位移动操作符 >>
+// 5 >> 1 右移1
+// 5  % 2 = 2 ... 1  / 2 % 2 = 1 ... 0  /  1 % 2 = 0 ... 1  5 的二进制是 0000 0101
+// 00000010 2
+
+//  17. 电话号码的字母组合 中等
+// 输入['23']  输出 ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"] 组合
+var letterCombinations = function(digits) {
+  if(digits.length == 0) return []
+  let res = []
+  const map = {'2': 'abc', '3': 'def', '4': 'ghi', '5': 'jkl', '6': 'mno', '7': 'pqrs', '8': 'tuv', '9': 'wxyz'}
+  const dfs = (curStr, i) =>{
+    if(i > digits.length - 1){
+      res.push(curStr)
+      return
+    }
+    const letters = map[digits[i]]
+    for(const l of letters){
+      dfs(curStr + l, i + 1)
+    }
+  }
+  dfs('', 0)
+  return res
+}
+
+// 38. 外观数列
+// 1.     1
+// 2.     11
+// 3.     21
+// 4.     1211
+// 5.     111221
+// 6.     312211
+// 每一项都是对上一项数字的描述
+// 解法1. 通过正则合并相同元素
+// var countAndSay = function(n) {
+//   let prev = '1'
+//   for(let i = 1; i < n; i++){
+//     prev = prev.replace(/(\d)\1*/g, item=>`${item.length}${item[0]}`)
+//   }
+//   return prev
+// }
+// 正则解释： \1搭配前面小括号使用，表示第一个小括号匹配的内容相同 (\d)\1* 表示匹配到 1（\1 0次），11，22（\1 1次）
+// 解法2.
+var countAndSay = function(n){
+  let prev = '1', cur = '1'
+  for(let i = 1; i < n; i++){
+    prev = cur
+    cur = ''
+    let left = 0, right = 0
+    while(right < prev.length){
+      while(prev[left] == prev[right] && right < prev.length){
+        right++
+      }
+      cur += (right - left).toString() + prev[left]
+      left = right
+    }
+  }
+  return cur
+}
+
+console.log(countAndSay(6))
+
+
+
+// leetcode66 加一
+var plusOne = function(digits) {
+  const len = digits.length
+  for(let i = len - 1; i >= 0; i--){
+    // 最后一位开始判断
+    digits[i]++
+    digits[i] %= 10
+    // +1后求余
+    if(digits[i]!=0){ // 余数不为0，说明这个数位上不需要再进位了，直接返回现在的数组
+      return digits
+    }
+  }
+  // 循环结束，所有位都要进位，走下面这个逻辑
+  digits = [...Array(len + 1)].map(_=>0)
+  return [1, ...digits]
+};
+let dis = [4, 0, 9]// [4, 3, 2, 1] //
+console.log(plusOne(dis))
+
+// leetcode67 二进制求和
+// var a = '11', b='1' 都是二进制的
+// 二进制11 3 二进制1 1 结果是 十进制的 4 转换为2进制的 100
+// a '1010' b '1011'
+var addBinary = function(a, b) {
+  let ans = ''
+  let ca = 0
+  for(let i = a.length - 1, j = b.length - 1; i >= 0 || j >= 0; i--, j--){
+    let sum = ca   // 0 0 1
+    sum += i >= 0?parseInt(a[i]): 0  // a[3] 0 a[2] 1 a[1]
+    sum += j >= 0?parseInt(b[j]): 0  // b[3] 1 b[2] 1
+    ans += sum % 2 // '1010'
+    ca = Math.floor(sum / 2) // 0 1 0 1
+  }
+  ans += ca == 1?ca: '' // '10101'
+  return ans.split('').reverse().join('')
+};
+
+const a = '11', b = '1'
+console.log(addBinary(a, b))
+
+// leetcode69 x的平方根
+var mySqrt = function(x) {
+  if(x < 2) return x
+  let left = 1, mid, right = Math.floor(x / 2)
+  while(left <= right){
+    mid = Math.floor(left + (right- left) / 2)
+    if(mid * mid == x) return mid
+    if(mid * mid < x){
+      left = mid + 1
+    } else {
+      right = mid - 1
+    }
+  }
+  return right
+};
+
+console.log(mySqrt(4))
+
+// leetcode53 最大子序和
+// let nums = [-2,1,-3,4,-1,2,1,-5,4] 连续子数组 [4,-1,2,1] 的和最大，为 6。输出 6
+var maxSubArray = function(nums) {
+
+};
+
+// leetcode58 最后一个单词的长度
+// 输入 'hello world' 输出 5
+var lengthOfLastWord = function(s) {
+  let end = s.length - 1
+  while(end >= 0 && s[end] == ' ') end--
+  if(end < 0) return 0
+  let start = end
+  while(start >= 0 && s[start] != ' ') start--
+  return end - start
+};
+let word = " "
+console.log(lengthOfLastWord(word))
+
+
+// leetcode 160 相交链表
+var getIntersectionNode = function(headA, headB) {
+
+};
+

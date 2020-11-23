@@ -43,3 +43,20 @@ const add1 = curry(add)
 console.log(add1(1, 2))
 console.log(add1(1)(2))
 console.log(add1(1)(2, 3))
+
+
+function curry2() {
+  let args = Array.prototype.slice.call(arguments)
+  console.log(args)
+  let inner = function () {
+    args.push(...arguments)
+    return inner
+  }
+  inner.toString = function () {
+    return args.reduce((pre, cur)=>pre + cur)
+  }
+  return inner
+}
+
+console.log(curry2(1)(2)(), curry2(1,2))
+

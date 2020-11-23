@@ -26,5 +26,6 @@ console.log(Array.from(a))
 const m = new Map()
 const o = {p: 'hello'}
 m.set(o, 'content')
-console.log(m.get(o))
+console.log(m, m.get(o))
 // 使用set 方法添加任意属性, 使用get 方法获取属性
+
