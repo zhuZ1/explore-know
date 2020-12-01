@@ -29,3 +29,14 @@ m.set(o, 'content')
 console.log(m, m.get(o))
 // 使用set 方法添加任意属性, 使用get 方法获取属性
 
+
+// set 求值
+let a1 = new Set([1, 2, 3]), b1 = new Set([2, 3, 4])
+// 并集
+let union = new Set([...a1, ...b1])
+// 交集
+let intersect = new Set([...a1].filter(item=>b1.has(item)))
+// 差集
+let difference = new Set([...a1].filter(item=>!b1.has(item)))
+
+console.log(union, intersect, difference)

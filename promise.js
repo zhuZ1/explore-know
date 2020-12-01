@@ -144,12 +144,49 @@ let p3 = new Promise(resolve=>{
   setTimeout(resolve, 2000, 'p3成功')
 })
 
-let p = myPromiseAll([p1, p2, p3])
-p.then((v)=>{
-  console.log(p)
-  console.log(v)
-}).catch((err)=>{
-  console.log(p)
-  console.log(err)
-})
+// let p = myPromiseAll([p1, p2, p3])
+// p.then((v)=>{
+//   console.log(p)
+//   console.log(v)
+// }).catch((err)=>{
+//   console.log(p)
+//   console.log(err)
+// })
 
+
+// promise 的串行和 并行
+// Promise 接收一个函数作为参数，函数的两个参数是两个回调函数
+const newP = function () {
+  return new Promise((resolve, reject)=>{
+    setTimeout(()=>{
+      console.log('newP')
+      resolve()
+    }, 1000)
+  })
+}
+
+const newP1 = function () {
+  return new Promise((resolve, reject)=>{
+    setTimeout(()=>{
+      console.log('newP1')
+      resolve()
+    }, 1000)
+  })
+}
+
+const newP2 = function () {
+  return new Promise((resolve, reject)=>{
+    setTimeout(()=>{
+      console.log('newP2')
+      resolve()
+    }, 1000)
+  })
+}
+
+newP().then(()=>{
+  return newP1()
+}).then(()=>{
+  return newP2()
+}).then(()=>{
+  console.log('end')
+})

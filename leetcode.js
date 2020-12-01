@@ -213,25 +213,7 @@ let arr1 = [
 
 console.log(JSON.parse(arr1[0].cardExt).outer_id)
 
-// 爬楼梯
-// 假设你正在爬楼梯，需要n阶能到达顶楼。 每次可以爬1或2级，你有多少种不同的方法爬到顶楼？
-// 分析： 1 2  3   4  1 1 1 1  1 2 1  2 1 1  2 2  1 1 2
-//        1 2  3   5
 
-var climbStairs = function(n) { // n是一个正整数
-  // 此方法时间超出
-  /*if(n<=2) return n
-  return climbStairs(n-1) + climbStairs(n-2)*/
-  // 普通遍历方法，交换值
-  var prev = 1, cur = 1, temp;
-  for (let i = 2; i < n + 1; i++) {
-    temp = cur  // 暂存当前值
-    cur = temp + prev // 当前值是前两次的和
-    prev = temp
-  }
-  return cur
-}
-console.log(climbStairs(4))
 
 // 有效括号, 是不是正确顺序闭合的
 var isValid = function(s) {
@@ -698,29 +680,9 @@ var addBinary = function(a, b) {
 const a = '11', b = '1'
 console.log(addBinary(a, b))
 
-// leetcode69 x的平方根
-var mySqrt = function(x) {
-  if(x < 2) return x
-  let left = 1, mid, right = Math.floor(x / 2)
-  while(left <= right){
-    mid = Math.floor(left + (right- left) / 2)
-    if(mid * mid == x) return mid
-    if(mid * mid < x){
-      left = mid + 1
-    } else {
-      right = mid - 1
-    }
-  }
-  return right
-};
 
-console.log(mySqrt(4))
 
-// leetcode53 最大子序和
-// let nums = [-2,1,-3,4,-1,2,1,-5,4] 连续子数组 [4,-1,2,1] 的和最大，为 6。输出 6
-var maxSubArray = function(nums) {
 
-};
 
 // leetcode58 最后一个单词的长度
 // 输入 'hello world' 输出 5
