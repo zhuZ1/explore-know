@@ -215,37 +215,6 @@ console.log(JSON.parse(arr1[0].cardExt).outer_id)
 
 
 
-// 有效括号, 是不是正确顺序闭合的
-var isValid = function(s) {
-  let arr = [], len = s.length
-  if(s=='') return true
-  if(len % 2) return false  // 奇数直接返回
-  for(let i = 0;i < len;i++){
-    let letter = s[i]
-    switch(letter) {
-      case '(':
-      case '[':
-      case '{':
-        arr.push(letter)
-        break
-      case ')':
-        if(arr.pop()!='(') return false
-        break
-      case ']':
-        if(arr.pop()!='[') return false
-        break
-      case '}':
-        if(arr.pop()!='{') return false
-        break
-    }
-
-  }
-  return !arr.length
-
-
-};
-
-console.log('返回括号的匹配结果', isValid('([}}])'))
 
 // 寻找两个正序数组的中位数，假设这 nums1 和 nums2 不会同时为空
 var findMedianSortedArrays = function(nums1, nums2) {
@@ -325,28 +294,6 @@ var reverse = function (x) {
 
 console.log('反转', reverse(-123))
 
-// 21. 合并两个有序链表
-//链表
-function nodeList(val){
-  this.val = val
-  this.next = null
-}
-
-var mergeTwoLists = function(l1, l2) {
-  if(l1 === null){
-    return l2;
-  }
-  if(l2 === null){
-    return l1;
-  }
-  if(l1.val < l2.val){
-    l1.next = mergeTwoLists(l1.next, l2);
-    return l1;
-  }else{
-    l2.next = mergeTwoLists(l1, l2.next);
-    return l2;
-  }
-};
 
 // 删除排序数组中的重复项（原地删除）
 var arr = [1, 1, 1, 1]
@@ -581,25 +528,6 @@ console.log(searchInsert(arrN, 4))
 // 5  % 2 = 2 ... 1  / 2 % 2 = 1 ... 0  /  1 % 2 = 0 ... 1  5 的二进制是 0000 0101
 // 00000010 2
 
-//  17. 电话号码的字母组合 中等
-// 输入['23']  输出 ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"] 组合
-var letterCombinations = function(digits) {
-  if(digits.length == 0) return []
-  let res = []
-  const map = {'2': 'abc', '3': 'def', '4': 'ghi', '5': 'jkl', '6': 'mno', '7': 'pqrs', '8': 'tuv', '9': 'wxyz'}
-  const dfs = (curStr, i) =>{
-    if(i > digits.length - 1){
-      res.push(curStr)
-      return
-    }
-    const letters = map[digits[i]]
-    for(const l of letters){
-      dfs(curStr + l, i + 1)
-    }
-  }
-  dfs('', 0)
-  return res
-}
 
 // 38. 外观数列
 // 1.     1
@@ -659,26 +587,7 @@ var plusOne = function(digits) {
 let dis = [4, 0, 9]// [4, 3, 2, 1] //
 console.log(plusOne(dis))
 
-// leetcode67 二进制求和
-// var a = '11', b='1' 都是二进制的
-// 二进制11 3 二进制1 1 结果是 十进制的 4 转换为2进制的 100
-// a '1010' b '1011'
-var addBinary = function(a, b) {
-  let ans = ''
-  let ca = 0
-  for(let i = a.length - 1, j = b.length - 1; i >= 0 || j >= 0; i--, j--){
-    let sum = ca   // 0 0 1
-    sum += i >= 0?parseInt(a[i]): 0  // a[3] 0 a[2] 1 a[1]
-    sum += j >= 0?parseInt(b[j]): 0  // b[3] 1 b[2] 1
-    ans += sum % 2 // '1010'
-    ca = Math.floor(sum / 2) // 0 1 0 1
-  }
-  ans += ca == 1?ca: '' // '10101'
-  return ans.split('').reverse().join('')
-};
 
-const a = '11', b = '1'
-console.log(addBinary(a, b))
 
 
 

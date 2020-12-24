@@ -236,3 +236,5 @@ var partitionLabels = function(S) {
 
 let S = "ababcbacadefegdehijhklij"
 console.log(partitionLabels(S))
+
+

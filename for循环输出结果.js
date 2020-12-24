@@ -1,6 +1,6 @@
-//
+
 // for (var i = 0; i < 5; i++){
-//   // console.log(i)
+//   console.log(i)
 //   setTimeout(()=>{  // setTimeout 异步执行队列， 在执行回调函数时，变量已经循环结束了
 //     console.log(i)
 //   }, i * 2000) // 外部的i 0 1 2 3 4 5 现在的时间点为准 1s 2s 3s 。。打印对应的数字
@@ -16,13 +16,14 @@
 // }
 
 // 2. IIFE 立即执行函数
-// for(var i = 0 ; i < 5; i++){
-//   (function (i) {
-//     setTimeout(function timer(){
-//       console.log(i)
-//     }, i * 1000)
-//   })(i)
-// }
+for(var i = 0 ; i < 5; i++){
+
+  (function (j) {
+    setTimeout(function timer(){
+      console.log(j)
+    }, j * 1000)
+  })(i)
+}
 
 // 3. 利用 setTimeout的第三个参数, 第三个参数可以作为回调函数的参数
 // for (var i = 0; i < 5; i++){
@@ -39,12 +40,12 @@
 // }
 
 // 5. 单独写一个 function 包住 setTimeout
-function loop(i) {
-  setTimeout(()=>{
-    console.log(i)
-  }, i * 1000)
-}
-
-for(var i = 0; i < 5; i++){
-  loop(i)
-}
+// function loop(i) {
+//   setTimeout(()=>{
+//     console.log(i)
+//   }, i * 1000)
+// }
+//
+// for(var i = 0; i < 5; i++){
+//   loop(i)
+// }

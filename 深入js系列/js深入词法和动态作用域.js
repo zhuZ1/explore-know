@@ -39,3 +39,51 @@ console.log(bar1())
      // 2.函数声明
      // 3.变量声明
 
+var obj = {
+  name:'zz',
+  say: function() {
+    console.log('name', this.name)
+  }
+}
+obj.say()
+
+var foo1 = obj.say
+foo1()
+
+  let newArr = [
+    ["2010", "", ""],
+    ["2012", "", "1990"],
+    ["硕士", "硕士", ""],
+    ["经管学部", "经管学部", ""],
+    ["天津大学", "天津大学", "北京林业大学"],
+    ["陈卫东", "", ""]
+  ]
+let res = [], keys = ['enrollmentYear', 'graduationYear', 'educationArr', 'collegeName', 'schoolArr', 'classTeacher']
+  for(let i = 0; i < newArr[0].length; i++){
+    let obj = {}
+    for(let j = 0; j < keys.length; j++){
+      obj[keys[j]] = newArr[j][i]
+    }
+    res.push(obj)
+
+  }
+  console.log(res)
+// let row = newArr[0].length, col = newArr.length
+// let eduList = Array.from(new Array(row), ()=> new Array(col).fill(0))
+// console.log('初始', eduList)
+// for(let i = 0; i < newArr.length; i++){
+//   for(let j = 0; j < newArr[i].length; j++){
+//     console.log(newArr[i][j])
+//     eduList[j][i] = newArr[i][j]
+//   }
+// }
+// console.log(eduList)
+// let res = [], keys = ['enrollmentYear', 'graduationYear', 'educationArr', 'collegeName', 'schoolArr', 'classTeacher']
+// for(let i = 0; i < eduList.length; i++){
+//   let obj = {}
+//   for(let j = 0; j < keys.length; j++){
+//     obj[keys[j]] = eduList[i][j]
+//   }
+//   res.push(obj)
+// }
+// console.log(res)

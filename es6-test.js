@@ -80,8 +80,8 @@ let arr = [1, 2, 3, 4]
 const newArr = arr.map(item=>({  // map返回一个新的数组， 原数组不变， 新数组是由callback执行函数执行后的结果
   src: item
 }))
+// 这里是直接返回的一个对象  {}会被解析为代码块，所以要在外面加一层 ()
 console.log(newArr)
-
 // 另一种方式
 const newArr1 = arr.reduce((res, item)=>{ // reduce降维
   res.push({src: item})
@@ -134,16 +134,6 @@ const findA = arr1.find(n=>n<3) // 找到第一个符合条件的数组成员并
 console.log(findA)
 // find 和 findIndex 方法都可以发现 NaN， 弥补了indexOf 方法的不只
 
-
-const newF = function (a) {
-  if (a >3 ) console.log('大于3的数')
-  console.log('这个数小于3')
-}
-
-newF(2)
-
-
-
 // es5的类和继承
 // function Point(x, y){  //构造函数
 //   this.x = x,
@@ -152,19 +142,24 @@ newF(2)
 // es6的类
 class Point { // 定义了一个类
   constructor(x, y){ // 类里面有一个构造方法  对应es5 的构造函数
-    this.x = x,  // this关键字代表实例对象, xy对应es5构造函数的参数
-      this.y = y
+    this.x = x // this关键字代表实例对象, xy对应es5构造函数的参数
+    this.y = y
+    this._count = 0  // 实例属性可以定义在constructor上
   }
+  // 实例属性也可以直接定义在最顶层
+  // _count = 0
 
   toString(){  // 定义另外的方法， 这个方法和构造方法都是类内部的方法， 平级的
     return `${this.x} + ${this.y}`
   }
+  // 定义在类上的方法是不可枚举的 es5定义在构造函数或其原型上的方法是可枚举的
 }
 
 // Point.prototype.toString = function () { // 也可以在原型上定义
 //   return `${this.x}${this.y}`
 // }
 
+console.log('是否可枚举', Object.keys(Point.prototype))
 // 等同于
 Point.prototype = {
   constructor(){},
@@ -172,7 +167,7 @@ Point.prototype = {
 }
 // 类的方法都是定义在原型上面， 所以类的新方法都可以定义在prototype对象上
 // Object.assign() 可以很方便的一次向类添加很多个方法
-const newP = new Point('zhu', 'zhen')
+const newP = new Point('zhu', 'zhen')  // 使用 new调用
 console.log(newP.toString())
 
 // class ColorPoint extends Point{
@@ -249,8 +244,7 @@ function useArguments() {
   // arguments 类数组对象， 可以使用Array.from(arguments),或者扩展运算符将其转换为正常的数组
   let arr = [...arguments]
   // reduce 求和
-  let newA = arr.reduce((a, b)=>a+b)
-  return newA
+  return arr.reduce((a, b)=>a+b)
 }
 console.log('和的值',useArguments(2, 3, 4))
 

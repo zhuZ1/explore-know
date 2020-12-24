@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document canvas</title>
+</head>
+<body>
+    <div>
+        <canvas id="myCanvas" width="400px" height="400px" style="border: 1px solid #333333"></canvas>
+        <img src="" alt="" id="img">
+    </div>
+    <script>
+        let ele = document.getElementById('myCanvas')
+        let ctx = ele.getContext('2d')
+        console.log(ctx)
+        // 画矩形，填充颜色
+        // ctx.fillStyle='#ff0000'
+        // ctx.fillRect(0, 0, 150, 75) // fillRect(x, y, width, height) 在画布上绘制 150 x 75 的矩形，从 (0, 0) 开始
+
+        // 画线
+        ctx.moveTo(0, 0)
+        ctx.lineTo(200, 100)
+        ctx.stroke()
+
+        // 绘制圆
+        ctx.beginPath()
+        ctx.arc(95, 50, 40, 0, 2 * Math.PI) // arc(x, y, r, start, stop) start 起始角0， 结束角2PI-> 360°
+        ctx.stroke()
+
+        // 绘制文本
+        ctx.font = '30px Arial'
+        ctx.strokeText('hello world', 10, 50) // fillText(text, x, y) 绘制实心文本  strokeText(text, x, y) 绘制空心文本
+
+        // 渐变
+            // 创建渐变
+        let grd = ctx.createLinearGradient(0, 0, 200, 0)
+        // createLinearGradient(x, y, x1, y1)  创建线条渐变  x,y 渐变开始点xy坐标 x1,y1 渐变结束点xy坐标
+        // createRadialGradient(x, y, r, x1, y1, r1)  创建一个径向/圆渐变  xyr开始  x1y1r1结束
+        grd.addColorStop(0, 'red')
+        grd.addColorStop(1, 'white')
+            // 填充渐变
+        ctx.fillStyle = grd
+        ctx.fillRect(10, 100, 150, 80)
+
+        // 读取一张图片到画布上
+        let img  = new Image()
+        img.src = './img/wallpaper.jpg'
+        img.onload = function () {
+          ctx.drawImage(img, 200, 200, 200, 200)  // drawImage(img, sx, sy, swidth, sheight, x, y, width, height)
+          // sx sy swidth sheight 开始剪切的xy坐标和宽高。 x y width height 放置图片的 xy坐标和宽高
+          let cImage = ele.toDataURL('image/png')
+          console.log(cImage)
+          let imgEle = document.getElementById('img')
+          imgEle.setAttribute('src', cImage)
+        }
+        // getImageData() 获取像素数据
+        // putImageData() 放入画布
+        // createImageData() 创建图像
+        // ctx.globalAlpha = 0.3 // 设置透明度
+        // ctx.globalCompositeOperation = 'source-in'  // 需要将源头像放置在目标头像的什么位置
+
+    </script>
+</body>
+</html>

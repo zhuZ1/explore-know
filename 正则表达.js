@@ -24,8 +24,8 @@
 let reg = /\d{3}/
 let reg1 = new RegExp(/\d{3}/)
 let str = '今天是123'
-console.log(reg.test(str))
-// test()方法返回布尔值
-console.log(reg.test(str))
-console.log(str.match(reg))
-
+console.log('test', reg.test(str)) // 字符串中查找匹配的正则的方法，返回boolean
+console.log('match', str.match(reg)) // 字符串中查找匹配的String的方法，返回一个数组
+console.log('search', str.search(reg))  // 字符串中查找匹配的 String的方法，返回index
+console.log('replace', str.replace(reg, '456')) // 字符串中查找匹配的 String的方法，替换匹配到的
+console.log('exec', reg.exec(str)) // 字符串中查找匹配的reg的方法，返回一个数组

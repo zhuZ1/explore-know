@@ -9,11 +9,10 @@ function currying(fn) {
     }
   }
 }
-function add(x, y) {  // adds 是 add 的柯里化函数，由接收两个参数转变为接收一个参数
-  return x + y
-}
-
-const adds = currying(add)
+// function add(x, y) {  // adds 是 add 的柯里化函数，由接收两个参数转变为接收一个参数
+//   return x + y
+// }
+// const adds = currying(add)
 // console.log(adds(1)(2))
 
 
@@ -38,16 +37,18 @@ function curry(fn) {
     }
   }
 }
+function add(x, y, z) {  // adds 是 add 的柯里化函数，由接收两个参数转变为接收一个参数
+  return x + y + z
+}
 
 const add1 = curry(add)
-console.log(add1(1, 2))
-console.log(add1(1)(2))
+console.log(add1(1, 2, 3))
+console.log(add1(1)(2)(3))
 console.log(add1(1)(2, 3))
 
 
 function curry2() {
   let args = Array.prototype.slice.call(arguments)
-  console.log(args)
   let inner = function () {
     args.push(...arguments)
     return inner
@@ -57,6 +58,12 @@ function curry2() {
   }
   return inner
 }
+curry2((1),(2))
+// console.log(curry2(1)(2).toString())
 
-console.log(curry2(1)(2)(), curry2(1,2))
 
+// sum函数，支持sum(1)(2)(3, 4)(5, 6, 7...)
+// console.log(sum())
+// console.log(sum(1))
+// console.log(sum(1)(2))
+// console.log(sum(1, 2)(3, 4)(5, 6))

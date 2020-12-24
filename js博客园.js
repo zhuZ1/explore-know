@@ -208,3 +208,12 @@ let newArr = arrObj.reduce((acc, cur)=>{
 console.log(newArr)
 
 
+var value = 1
+function bar1(){
+  console.log('this', value)
+}
+function bar2() {
+  var value = 2
+  bar1()
+}
+
