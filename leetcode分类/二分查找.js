@@ -3,7 +3,7 @@ var mySqrt = function(x) {
   if(x < 2) return x
   let left = 1, mid, right = Math.floor(x / 2)
   while(left <= right){
-    mid = Math.floor(left + (right- left) / 2)
+    mid = Math.floor(left + (right - left) / 2)
     if(mid * mid == x) return mid
     if(mid * mid < x){
       left = mid + 1
@@ -17,6 +17,7 @@ var mySqrt = function(x) {
 console.log(mySqrt(4))
 
 // leetcode744 大于给定元素的最小元素
+// 字母依序循环出现 a,b,c,d...z,a,b..
 var nextGreatestLetter = function(letters, target) {
   if(target >= letters[letters.length - 1]){
     return letters[0]

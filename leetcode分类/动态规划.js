@@ -8,7 +8,7 @@ var climbStairs = function(n) { // n是一个正整数
   var prev = 1, cur = 1, temp;
   for (let i = 2; i < n + 1; i++) {
     temp = cur  // 暂存当前值
-    cur = temp + prev // 当前值是前两次的和
+    cur = prev + cur // 当前值是前两次的和
     prev = temp
   }
   return cur
@@ -61,12 +61,10 @@ var minPathSum = function(grid) {
   // 当前项最小路径和 = 当前项值 + 上项或左项中的最小值
   // grid[i][j] += Math.min(grid[i - 1][j], grid[i][j - 1])
   let row = grid.length, col = grid[0].length // 行 / 列
-  for(let i = 1; i < row; i++){
-    // grid[1][0] = grid[1][0] + grid[0][0]
-    // grid[2][0] = grid[2][0] + grid[1][0]
+  for(let i = 1; i < row; i++){ // 第一列
     grid[i][0] += grid[i - 1][0]
   }
-  for (let j = 1; j < col; j++){
+  for (let j = 1; j < col; j++){  // 第一行
     grid[0][j] += grid[0][j - 1]
   }
   for(let i = 1; i < row; i++){
@@ -84,11 +82,11 @@ console.log(minPathSum(grid))
 var uniquePaths = function(m, n) {
   let cur = new Array(n).fill(1)
   for(let i = 1; i < m; i++){
-    for(let r = 1; r < n; r++){
+    for(let r = 1; r < n; r++){  // 遍历行，扫描列   某个点的路径数 dp[r] = 左列 dp[r - 1] + 上行dp[r]
       cur[r] = cur[r - 1] + cur[r]
     }
   }
-  return cur[n - 1]
+  return cur[n - 1]  // dp[dp.length - 1]
 };
 let m = 7, n = 3
 console.log(uniquePaths(m, n))
@@ -96,7 +94,7 @@ console.log(uniquePaths(m, n))
 // leetcode650 复制粘贴字符
 // 起初只有字符A，只能复制全部字符，然后粘贴你上次复制的字符
 // 给定一个数字 n，最少的操作次数，在记事本中打印出恰好n 个A
-var minSteps = function(n) {
+var minSteps = function(n) {  // 关键在于找质数
   let res = 0
   for(let i = 2; i <= n; i++){
     while(n % i == 0){

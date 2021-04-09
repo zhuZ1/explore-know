@@ -143,3 +143,85 @@ var combinationSum3 = function (k, n) {
 }
 let k = 3, n = 7
 console.log(combinationSum3(k, n))
+
+// leetcode 78 子集
+// 给定一组不含重复元素的整数数组nums, 返回所有可能的子集
+var subsets = (nums) => {
+  const res = []
+  const dfs = (index, list) => {
+    res.push(list.slice()) // 加入解集
+    for(let i = index; i < nums.length; i++){ // 枚举可选的数
+      list.push(nums[i]) // 选一个数
+      dfs(i + 1, list) // 基于选择的数 继续递归， i+1
+      list.pop() // 撤销选择，回溯
+    }
+  }
+  dfs(0, [])
+  return res
+}
+
+
+/*
+Definition for a binary tree node.
+function TreeNode(val, left, right){
+  this.val = (val === undefined ? 0: val)
+  this.left = (left === undefined ? null: left)
+  this.right = (right === undefined ? null: right)
+
+* */
+// 前序遍历
+// 根节点 - 左子树 - 右子树
+// leetcode 144. 二叉树的前序遍历
+// 1. 递归方法
+// var preorderTraversal = function (root) {
+//   return root ? [root.val, ...preorderTraversal(root.left), ...preorderTraversal(root.right)]: []
+// }
+// 2. 迭代方法
+var preorderTraversal = function (root) {
+  let arr = [], res = []
+  root && arr.push(root)
+  while(arr.length > 0){
+    let cur = arr.pop()
+    res.push(cur.val)
+    cur.right && arr.push(cur.right)
+    cur.left && arr.push(cur.left)
+  }
+  return res
+}
+
+// 中序遍历
+// 左子树 - 根节点 - 右子树
+// leetcode 94. 二叉树的中序遍历
+var inorderTraversal = function (root) {
+  let arr = [], res = []
+  while(root || arr.length){
+    while(root){
+      arr.push(root)
+      root = root.left
+    }
+    root = arr.pop()
+    res.push(root.val)
+    root = root.right
+  }
+  return res
+}
+
+// 后序遍历
+// 左子树 - 右子树 - 根节点
+// leetcode 145. 二叉树的后序遍历
+var postorderTraversal = function(root){
+  let arr = [], res = []
+  root && arr.push(root)
+  while(arr.length > 0){
+    let cur = arr.pop()
+    res.unshift(cur.val)
+    if(cur.left){
+      arr.push(cur.left)
+    }
+    if(cur.right){
+      arr.push(cur.right)
+    }
+  }
+  return res
+}
+

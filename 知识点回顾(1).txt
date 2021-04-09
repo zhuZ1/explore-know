@@ -1,0 +1,784 @@
+// JS数据类型 （mdn）
+基本类型
+  Number String Null Undefined Boolean Symbol es6新增 BigInt
+引用类型
+    Object
+基本数据类型 存储在栈中
+引用类型存储在堆中，栈中保存对象的引用地址
+栈内存是自动分配的， 堆内存是动态分配的，不会自己释放。使用完对象将其设置为 null，能有效减少无用的内存消耗
+基本类型中又包含了基本包装类型: Number String Boolean
+基本包装类型和引用类型的区别是：生命周期不同
+    装箱： 原始数据类型转化为对应的包装对象
+    拆箱： 将包装对象转化为对应的原始类型值
+
+判断数据类型的几种方法：
+1. typeof 判断简单类型 一元操作符
+    无法准确判断引用类型
+    typeof null // 'object' 原因是不同的对象在底层都是用二进制表示的，二进制前三位储存其类型信息。
+    前三位都为0的就被判定为 object， null的二进制全是0，自然被判定为 object
+2. instanceof
+    原理：构造函数的prototype属性是否出现在实例对象的原型链上
+    用于 判断一个实例是否是某种类型，也可以判断某个实例是否是其父类型或者祖先类型的实例
+3. constructor
+    原型对象上的一个属性，实例会继承这个属性
+    返回创建实例的 Object构造函数的引用
+    用于 判断某个实例是不是由某个构造函数创建的，
+    修改了原型就会改变其构造函数
+4. Object.prototype.toString.call()
+    返回一个 '[object Class]' 组成的字符串
+
+// 作用域 和 作用域链
+规定变量和函数的可使用范围，叫做作用域
+根据执行环境，外部环境无法访问内部环境中的变量，而内部环境可以访问外部（父）环境中的变量。
+查找变量或者函数时，需要从局部作用域到全局作用域依次查找，就形成了作用域链
+
+词法作用域：函数的作用域在定义的时候就已经决定了 (js是词法作用域，也称静态作用域）
+动态作用域：函数的作用域在调用的时候才决定的
+    执行上下文：
+        全局执行上下文
+            创建一个全局的window对象，并规定this执行window，js执行时被压入栈底，浏览器关闭弹出
+        函数执行上下文
+            每次函数调用，都会创建一个函数执行上下文
+            执行上下文分为创建阶段和执行阶段
+                创建阶段：
+                    创建变量对象： 函数形参，函数声明，变量声明；this指向；确定作用域
+                执行阶段：
+                    变量对象被激活
+
+// 变量提升
+JS引擎会进行预解析，这导致所有被声明的变量都会被提升到代码的头部，也就是变量提升
+
+
+// 闭包
+当函数可以记住并访问所在的词法作用域的时候，就产生了闭包
+闭包可以理解为一种现象，一个函数的返回值是另一个函数，内部的函数调用了父函数内部的变量，返回的这个函数在外部被执行，就产生了闭包
+特点：
+1. 函数嵌套函数
+2. 内部可以访问外部函数中的变量
+3. 参数和变量不会被回收，可以通过闭包创建私有变量和方法
+
+// 原型和原型链
+原型链： 访问一个对象的属性和方法的时候，如果自身没有找到，就去原型上面找，原型也没有找到，
+        就去原型的原型上找，一直找到最上面，就形成了原型链
+        实例对象和 原型对象之间通过 __proto__联系起来
+        所有对象都有 __proto__属性， 只有函数有 prototype属性
+   继承的几种方法
+  1. 原型链继承
+  2. 借用构造函数继承
+  3. 原型链 + 构造函数继承
+  4. 寄生组合式继承(最佳)
+  5. es6 Class extends
+
+// 内存泄漏
+    1. 意外的全局变量
+        变量没被声明，直接赋值成为全局变量
+        this指向全局，导致全局变量的产生
+    2. 被遗忘的计时器或回调函数
+    3. 闭包
+    4. 没有清理的dom元素引用
+    垃圾回收：
+        1. 引用计数
+            引擎中有一张引用表，保存了所有资源的引用次数，如果某个值的引用次数是0 就表示这个变量不再被使用了
+        2. 标记清除 常用
+            垃圾收集器会为 存储在内存中的所有变量都加上标记，然后它会去除环境中的变量以及被环境中的变量引用的标记
+            在此之后再被加上标记的变量就被视为要回收的变量
+
+// 事件循环机制
+为什么js 是单线程？
+    js单线程与它的用途有关，作为浏览器的脚本语言，js的主要用途是与用户互动以及操作DOM，因此只能是单线程，否则会带来复杂的同步问题。
+    1. 同步任务在主线程上执行，形成一个执行栈
+    2. 主线程之外还存在一个任务队列，异步任务有了结果，就会在任务队列中添加一个事件
+    3. 执行栈中同步任务执行完毕，系统就会读取任务队列，异步任务结束等待状态，进入执行栈，开始执行
+    4. 主线程不断重复上述过程
+    vue中的nextTick： 主线程的执行过程就是一个tick，数据变更到DOM的重新渲染是一个异步过程，发生在下一个tick
+    宏任务微任务
+       宏任务：
+            I/O
+            setTimeout
+            setInterval
+            setImmediate(node的）
+            requestAnimationFrame() 浏览器的
+       微任务：
+            process.nextTick() node
+            MutationObserver 浏览器的
+            promise.then catch finally
+
+// 事件流
+    事件冒泡：微软提出，事件会从最内层的元素开始发生，一直向上传播，直到document对象
+    事件捕获：网景提出，事件会从最外层开始发生，直到目标元素
+    事件三个阶段
+        捕获，目标，冒泡
+    事件委托（事件代理）：把本该子元素做的事情交给父元素去做（事件冒泡）
+    作用：1. 新生成的元素要绑定事件会比较麻烦
+          2. 同一类型元素使用事件委托只需要绑定在一个元素上
+    addEventListener( 事件名，事件处理函数，冒泡/捕获 （false/true）)
+    对于事件代理来说，在冒泡还是捕获阶段来处理事件函数并没有优劣之分，考虑到兼容性问题，建议在冒泡阶段
+    阻止事件冒泡：
+        1. event.StopPropagation()
+        2. 在事件处理函数中 return false  不仅阻止了事件冒泡，也阻止了事件本身
+        3. event.target === event.currentTarget 让触发事件的元素等于绑定事件的元素
+    阻止默认事件
+        1. event.preventDefault()
+        2. return false
+
+// var，let 和 const区别
+    let 产生块级作用域
+    let const不存在变量提升： 变量的定义必须在使用之前（暂时性死区）
+    const 声明一个只读的常量，一旦声明，常量的值就不能改变
+    const 实际上保证的，并不是变量的值不得改动，而是变量指向的那个内存地址所保存的数据不能改动
+    对象的属性值是可以改动的，不想改动可以使用 Object.freeze()
+    es5中 var 和function声明的变量是顶层对象 window是global的一个属性
+    es6中 let const class声明的变量不再是顶层对象的属性，全局变量将逐渐和顶层对象脱钩 挂载到 Script下与 Global平级
+
+// 数组的方法
+    // 改变原数组
+    pop()  // 返回删除的元素
+    push()  // 返回改变后的数组长度
+    shift() // 返回截取的第一个元素
+    unshift()  // 返回长度
+    splice()  // 返回的是删除的元素组成的数组
+    sort() // 原地排序
+         // 原理 sort()方法默认将所有元素转换为字符串，然后根据 ASCII码进行排序。
+         // 是一个高阶函数，可以接受一个比较函数来实行自定义排序，
+         // 冒泡和插入排序结合
+    reverse()  // 原地翻转
+    // 不改变原数组
+    slice()  // 返回截取后的新数组
+    concat()  // 返回合并后的新数组
+    // 遍历方法
+    reduce()   // 多个合并为一个，返回合并后的结果
+    map()  // 返回调用回调函数后的新数组
+    forEach()  // 没有返回值
+    filter()  // 返回符合条件的元素组成的新数组
+    every()  // 所有都为 true 返回true
+    some()  // 有为true的 结果就为 true
+
+// 0.1 + 0.2 != 0.3
+     js中，浮点数是使用64位固定长度来表示的，1位表示符号位，11位用来表示指数位，剩下的52位表示尾数位
+     0.1转换为二进制是无线循环数，由于只能储存52位尾数位，所以会出现精度丢失
+     转化成二进制运算后再转化为十进制 > 0.3
+     解决： 设置一个误差范围，称为 “机器精度” -- Number.EPSILON, 精度范围内说明是相等的
+
+// 回流和重绘
+    回流：render树中一部分或全部元素需要改变尺寸，布局，或者需要隐藏而需要重新构建，
+            回流是影响浏览器性能的关键因素
+    重绘：render树中一部分元素发生改变，不影响布局，只影响外观
+        如何减少重绘和回流？
+            1. css
+                用transform 代替 top，left等
+                使用visibility代替 display：none/block
+                将需要添加动画效果的元素 position设置为 absolute或 fixed，控制动画可以requestAnimationFrame
+                将需要频繁重绘或回流的节点设置为图层
+                尽可能在dom树的末端改变class
+            2. js层面
+                避免频繁操作样式
+                避免频繁操作dom
+                避免频繁读取会引发回流/重绘的属性
+                对具有复杂动画的元素使用绝对定位
+
+// BFC 块级格式化上下文
+    具有BFC特性的容器可以看作隔离了的独立容器，不会影响到外部元素
+    概念：它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，
+        以及和其他元素的关系和相互作用
+    如何触发：
+        1. html根元素
+        2. 浮动元素：float除none以为的值
+        3. 绝对定位元素，position(absolute, fixed)
+        4. display inline-block，flex
+        5. overflow 除了 visible以外的值
+
+// 实现三栏布局
+    （两边定宽，中间自适应）
+    .parent display: flex
+    .mid flex:1
+    .left, .right 500px
+
+// css实现一个三角形
+      .triangle{
+                width: 0;
+                height: 0;
+                border-width: 30px;
+                border-style: solid;
+                border-bottom: 0;
+                border-color: #000000 transparent transparent transparent;
+            }
+
+// js脚本阻塞
+    加载脚本会阻塞页面渲染，所以尽量将script标签放在结束标签之前，这样可以尽可能的减少页面阻塞，但是多段脚本之间的加载还是会相互阻塞
+        此时可以使用 async 和 defer，或者使用js动态渲染脚本元素
+    async 和 defer的区分
+        引入脚本时都不加，脚本会立即加载并执行，dom加载等待
+        async脚本异步加载进行，但是下载完毕后会立即执行脚本，dom没加载完也要等待
+        defer脚本异步加载，下载完成后不会立即加载，而是等待dom加载完成
+
+// es6转成es5是如何实现的
+    1.将代码字符串解析成抽象语法树，即AST，是用来表示源代码语法的一种树形结构，树上的每个节点都代表源代码的
+    一种结构，我们的代码高亮，代码检查等都是依靠的AST
+    2.对AST进行处理，在这个阶段可以对es6代码进行相应转换，即转成es5代码
+    3.根据处理后的AST再生成代码字符串
+
+// 前端工程化
+    工程化即系统化，模块化，规范化的一个过程
+        开发角度，要解决的问题：
+           1. 提高开发生产效率
+           2. 降低维护难度
+        部署角度要解决的问题：
+           1. 代码审查
+           2. 压缩打包
+           3. 增量更新
+           4. 单元测试
+     1. 模块化：
+        将大文件拆分成相互依赖的小文件，再进行统一的拼装和加载
+        模块化开发的最大价值是 分治
+        js模块化方案 AMD/CommonJS/UMD/ES6 module等
+        css模块化方案 less, sass, stylus等，webpack的css-loader组件自带了 css modules
+     2. 组件化
+     3. 规范化：eslint配置，文件，组件，函数，变量命名风格
+     4. 自动化： 单元测试，监控sentry
+
+// 前端性能优化
+    1. 减少请求数量
+        文件合并
+            公共库合并
+            不同页面单独合并
+        图片处理
+            将图片以base64方式嵌到html中
+            字体图标代替图片
+        减少重定向
+        使用缓存
+    2. 减小资源大小
+        html，css，js，图片压缩
+        开启gzip
+        安卓下可以使用 webp格式的图片
+    3.优化网络连接
+        使用CDN
+        使用DNS预解析
+    4. 优化资源加载
+        按需加载
+        资源预加载和懒加载
+    5. 减少重绘和回流
+        css布局优化，事件代理，节流防抖
+    6. 性能更好的API
+        用合适的选择器，requestAnimationFrame，webWork
+    7. webpack打包优化
+        打包公共代码，按需加载，tree shaking
+
+// 如何利用webpack 来优化前端性能？
+    优化输出结果，让打包的最终结果在浏览器运行快速高效
+    1. 压缩代码。删除多余的代码，注释，简化代码的写法等方式，可以利用webpack的UglifyJsPlugin
+    和 ParallelUglifyPlugin压缩js，利用cssnano来压缩 css
+    2. 利用CDN加速。在构建过程中，将引用的静态资源路径修改为CDN上对应的路径，可以利用webpack对于output的
+    参数和各loader的 publicPath参数来修改资源路径
+    3. 删除死代码（tree shaking）。将代码中永不会走到的片段删除。可以通过在启动webpack时添加参数
+    --optimize-minimize来实现
+    4. 提取公共代码
+// VUE项目优化
+    1. 代码层面的优化
+        v-if和v-show的区分使用
+        computed和watch的区分使用
+        v-for遍历必须指定key，避免与v-if一同使用
+        图片资源懒加载
+        路由懒加载
+        第三方插件的按需引入
+    2.  webpack层面的优化
+        webpack对图片进行压缩
+        减少es6转化为es5的冗余代码
+        提取公共代码
+        模板预编译：vue-template-loader在构建过程中将模板文件转换为js渲染函数
+        提取组件的css
+        优化sourceMap
+        构建结果输出分析
+        vue项目的编译优化
+    3. 基础的web技术的优化
+        开启gzip，不是每个浏览器都支持gzip的，content-encoding：gzip,来标识对gzip的支持，需要后端配置
+        浏览器缓存的使用
+        cdn
+        使用chrome performance查找性能瓶颈
+
+// css动画和js动画的优缺点？
+    css动画：在性能上会稍微好一些，浏览器会对css动画做一些优化(比如专门新建图层来跑动画）
+            代码相对简单
+            缺点也很明显：
+                1. 在动画控制上不够灵活
+                2. 兼容性不好
+                3. 部分动画功能无法实现
+        // transition animation区别
+            过渡需要事件触发，过程只有开始和结束两个
+            动画不需要事件触发，可以是关键帧
+    js动画： 对于动画的控制能力很强，可以在动画执行的过程中对动画进行控制
+            动画效果比css3要丰富
+            css3动画有兼容性问题，js动画大多数时候没有兼容性问题
+            缺点：
+                js运行在浏览器的主线程中，可能会被其他任务干扰，导致丢帧的现象
+                js动画代码复杂度高于css3动画
+
+
+// git revert git reset
+  git revert 撤销某次提交， git reset 撤销到某次提交
+
+// 选择器类型
+ id 类 标签  相邻 子代 后代 属性 通配符 伪类 选择器
+ 优先级  !important 内联 id class tag
+ 可继承的属性
+    字体属性 文本属性  可见性: opacity visibility
+ margin padding 的百分比值是根据其父元素的宽度来设定的
+
+ // 盒模型：
+    本质上是一个盒子，封装周围的HTML元素，包括 边距，边框，填充和实际内容
+    w3c标准盒模型 content-box，属性 width， height只包含内容，不包含 border和 padding
+    ie盒模型 border-box，属性 width， height 包含 content padding border
+
+// 移动端1px的问题
+    1px在高清屏下，显得很粗
+    DPR 设备像素和 css像素的比值
+    比较好的两种解决方案：
+        伪元素
+            设置绝对定位，width 100% height 1px transform（scale 0.5)
+        使用js设置 viewport的 scale值
+            获取 name = viewport 的meta标签 ，根据 window.dpr 获取设备的dpr，动态设置content属性
+
+// 文本基线
+    img图片通常会因为根据文本基线对齐而产生额外的基线值
+    解决方法：
+        1.设置为块元素
+        2.vertical-align: bottom
+        3.font-size: 0
+
+// 自适应和 响应式
+    自适应：在不同大小的屏幕上展示相同的内容，网页布局不会改变，所以在屏幕较小的设备上显的很拥挤
+        响应式应运而生，包含了自适应，在自适应的基础上进行了网页布局调整
+    允许页面宽度自动调整：
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    此外还有 maximum = 1.0, use-scalable = no 允许用户缩放的最大比例，用户是否可以手动缩放
+    viewport是网页默认的宽度和高度，网页宽度默认等于屏幕宽度，原始缩放比例为1， 即网页初始大小占屏幕面积的100%
+    rem: 相对于浏览器的根元素 html的 font-size 默认情况下是 16px
+    所以1rem = 16px 通常将 html { font-size: 62.5% } 那么 1rem = 10px
+    em: 相对于父元素的字体大小，会继承父元素的 font-size 大小，但不是简单的继承，会先查找自身也没有设置 font-size，
+    有就根据自身大小来设置， 没有就查找父元素，再没有就继承根元素的 font-size
+
+// 数据结构
+    数组：可以在内存中连续存储多个元素的结构，在内存中的分配也是连续的
+    栈：栈是一种特殊的线性表，仅能在线性表的一段进行操作，栈顶允许操作，栈底不允许操作
+        栈的特点先进后出
+    队列：跟栈一样，也是一种线性表，不同的是队列可以在一端添加元素，在另一端取出元素，先进先出
+    链表：是一种线性表，但是并不会按照线性的顺序存储数据，而是在每一个节点里存到下一个节点的指针，
+        根据指针的指向，链表能形成不同的结构，例如单链表，双向链表，循环链表等
+    树：树是由 n>=1个有限节点组成的一个具有层次关系的集合
+
+// 状态码
+    200 请求成功
+    301 资源被永久转移到新位置
+    302 临时转移
+    303 查看其他位置
+    304 上次请求后资源未修改
+    400 服务器不理解请求的语法
+    403 拒绝请求
+    404 请求的资源不存在
+    409 请求的资源与资源的当前状态发生冲突
+    410 服务器上的某个资源被永久删除
+    500 内部服务器错误
+    503 服务器不可用
+    505 不支持的http协议版本
+
+// http 请求头和响应头都包含什么？
+    通用信息：请求的url地址，请求方法，状态码
+    请求头： Accept  指定客户端能够接收的内容类型
+             Accept-encoding   客户端浏览器所能支持的返回压缩格式
+             Connection: (keep-alive) 表示是否需要持久连接
+             Content-Length     请求头的长度
+             Content-Type   显示此Http请求提交的内容类型
+             User-Agent  客户端信息
+             Referer   包含一个URL，请求来自于哪个页面
+             Origin    目标地址
+    响应头： Allow  对某网络资源的有效的请求行为，不允许则返回 405
+            Cache-Control   告诉所有的缓存机制是否可以缓存及哪种机制
+            Content-Type    返回内容的MIME类型
+            Date   原始服务器消息发出的时间
+            ETag    请求变量的实体标签的当前值
+            Expires    响应过期的日期和时间
+            Last-Modified   请求资源的最后修改时间
+            Location    用来重定向接收方到非请求URL的位置来完成请求或标识新的资源
+            Server 服务器软件名字
+            Set-Cookie  设置Http Cookie
+
+// Set Map
+    Set：
+    类似于数组，但是成员的值都是唯一的，本身是一个构造函数
+    Set函数可以接收一个数组（或者其他具有 iterable接口的其他数据结构）作为参数
+    内部判断是否不同，类似于精确相等运算符，主要区别是 认为 NaN等于自身，而精确相等运算符认为 NaN不等于自身
+    实例方法分为两类：
+        操作方法
+            add 添加一个值 返回Set结构本身
+            delete 删除某个值 bool
+            has 是否有某个值 bool
+            clear 清除所有成员，没有返回值
+        遍历方法
+            keys
+            values
+            entries  以上均返回遍历器对象
+            forEach 回调函数进行遍历
+    Map：
+      size 返回Map结构的成员总数
+      set 设置键值对
+      get 获取key对应的键值
+      has 是否存在某个属性 bool
+      delete 删除某个键 bool
+      clear 清除所有成员，没有返回值
+      WeakMap：
+        只能接受对象（null除外）作为键名
+        键名指向的对象不计入垃圾回收机制，一旦不再需要，WeakMap对应的键值对都会消失，不需要手动清除
+        实例方法： get set has delete
+
+// promiseA+ 规范
+    1. 术语
+        promise
+            promise 是一个拥有then方法的对象或函数，其行为符合本规范
+            thenable 是一个定义了then方法的对象或函数
+            值(value) 指任何js的合法值
+            异常(Exception) 是使用throw语句抛出的一个值
+            据因(reason) 表示一个promise的拒绝原因
+    2. 要求
+        2.1 promise 的三种状态
+            pending， fulfilled， rejected
+        2.2 then 方法
+            一个promise必须提供一个then方法以访问其当前值，终值和据因
+            promise.then(onFulfilled, onRejected), 返回一个promise对象
+
+// typeScript
+// 正则表达式
+// 设计模式
+// 模块加载方案
+// 几种异步方案的比较
+
+// 手写 call，apply，bind
+// 手写 reduce
+// 手写 instanceof
+// 实现一个 new
+// 实现 promise.all, race, allSettled方法
+// 几种继承方式
+// 手写原生ajax， 封装成 promise
+// 手写发布订阅模式
+// 手写jsonp
+// 手写节流/防抖
+// 深浅拷贝
+// 数组乱序
+// reduce数组拍平
+// async 实现原理
+// Iterator遍历器实现
+
+// 三次握手四次挥手
+  三次握手
+  客户端向服务器发送 syn = 1， seq = x的包， 请求建立连接
+  服务器发回一个 syn = 1， ack = x + 1，seq = y的包以是确认信息
+  客户端回传一个 ack = y + 1， seq = z的包告诉浏览器准备接受
+  四次挥手
+    发起方向接收方发起fin ack seq报文，请求关闭连接，兵进入fin wait 1状态
+    接收方向发起方 发送 ack seq报文，表示请求报文接收完毕，同意关闭请求，此时 发起方是 fin wait 2状态
+    接收方向发起方发送报文 fin ack seq 报文，表示响应报文发送完毕，我要关闭了你也准备吧
+    并且进入 last ack状态
+    发起方向接收方发送报文 ack seq，表示响应报文接收完毕，要关闭请求了，兵进入time wait状态，接收方接到后
+    关闭连接，发起方在等待一段时间后正常关闭
+
+// 防抖节流的应用场景
+    防抖场景： 用户输入停止一段时间后再去获取数据
+                resize过程
+                登录，发短信等按钮避免用户点击过快
+                文本编辑器实时保存，当无任何更改操作1s后保存
+    节流场景： 懒加载时要监听计算滚动条的位置，但不必每次滑动都触发，可以降低计算的频率
+                做商品预览图的放大镜效果时，不必每次鼠标移动都计算位置
+                浏览器播放事件，每隔1sj计算一次进度信息
+
+
+
+// fetch
+    Fetch API提供了一个js接口，用于访问和操纵HTTP管道的一些具体部分，例如请求和响应，
+    还提供了一个全局的 fetch方法，该方法提供了一种简单，合理的方式来跨网络异步获取资源
+    以前是使用 XMLHttpRequest实现的，Fetch提供了一种更理想的替代方案
+    fetch() 返回的Promise 不会被标记为 reject，即使相应的状态码是 404 或者 500，相反它会将Promise的状态
+    标记为resolve，但是会将 resolve返回值的ok属性设置为false， 仅当网络故障或者请求被阻止时，才会标记成 reject
+    可以接受跨域cookies，不会发送cookies
+
+// 三种创建对象的方式的区别
+    字面量和 new关键字创建的对象是Object实例，都继承了原型链的属性
+    Object.create(arg, pro) // 参数是对象，属性描述符
+        arg为null，新对象是空对象，没有原型，不继承任何对象
+        arg为指定对象，新对象的原型指向指定对象，继承指定对象
+        想要创建一个真正的空对象，方法有两种：
+            1. Object.create(null)
+            2. let obj = {}, Object.setPropertyOf(obj, null)
+
+// window.onload 和 DOMContentLoaded的区别
+    onload事件，页面上所有的DOM，样式表，脚本，图片等都已经加载完成了
+   DOMContentLoaded事件触发时，仅当dom加载完成，不包括其他
+
+
+
+
+
+
+/*      Vue相关
+// keep-alive原理
+   keep-alive是一个抽象组件，它自身不会渲染一个DOM元素，也不会出现在父组件链中，
+    使用keep-alive包裹动态组件时，会缓存不活动的组件，而不是销毁它们
+    总的来说，keep-alive用来保存组件的渲染状态
+    include定义缓存白名单，exclude定义缓存黑名单，被命中的组件将不会被缓存，max定义缓存组件的上限，超出上限
+    使用LRU的策略置换缓存数据
+        LRU策略: 内存管理的一种页面置换算法，对于在内存中但又不用的数据块，叫做LRU
+                操作系统会根据哪些数据属于LRU而将其移出内存而腾出空间来加载另外的数据
+    源码实现：
+        created 钩子会创建一个cache对象，用来作为缓存容器，保存vnode节点
+        destoryed 钩子则在组件被销毁的时候清除cache缓存中的所有组件实例
+        render函数
+            首先通过getFirstComponentChild获取第一个子组件，获取该组件的name，接下来会将这个name通过 include和 exclude
+        属性进行匹配（exclude优先级更高），匹配不成功（说明不需要缓存）则不进行任何操作直接返回vnode，vnode
+        检测 include和 exclude属性匹配的函数 支持通过组件名 'a, b, c' 或者正则表达式两种方式分别检测是否匹配当前组件
+        接下来根据key 在this.cache中查找，如果存在则说明之前已经缓存过了，直接将缓存的 vnode覆盖到目前的vnode上面，否则将
+        vnode存储在cache中
+        watch
+            用来监听 include和 exclude，在被修改的时候对cache进行修正
+        组件渲染：
+            不会生成真正的DOM节点，Vue初始化生命周期，为组件实例建立父子关系会根据abstract属性决定是否忽略某个组件
+            首次渲染
+                vue的渲染都会到 patch过程，而组件的patch过程会执行createComponent方法
+                第一次渲染 将 vnode缓存到内存中，并且设置 vnode.data.keepAlive为true
+                走正常的init的钩子函数执行组件的mount，当vnode已经执行完patch后，执行initComponent函数
+                对于首次渲染而言，除了在 <keep-alive>中建立缓存，和普通组件的渲染没什么区别
+            缓存渲染
+                数据发生变化，在patch过程中会执行 patchVnode的逻辑，
+                它会对比新旧节点，甚至对比它们的子节点去做更新逻辑，但是对于组件vnode而言，是没有children的
+                patchVnode在做各种diff之前，会先执行 prepatch的钩子函数，
+                prepatch的核心逻辑就是执行 updateChildComponent，该方法主要是去更新组件实例的一些属性
+                <keep-alive>本质上支持了slot，所以执行prepatch的时候，需要对这些slots进行重新解析，重新执行
+                <keep-alive>的render方法，如果包裹的第一个组件 vnode命中缓存，则直接返回缓存中的 vnode.componentInstance
+                接着又会执行patch过程，再次执行到 createComponent方法
+               在执行init钩子函数的时候不会再执行组件的mount过程，最后通过insert就把缓存的dom对象直接插入到目标元素中
+
+// vue-router原理
+    vue-router通过hash与 History interface两种方式实现前端路由
+    更新视图但不重新请求页面，目前在浏览器中这一功能的实现主要有两种方式
+    1. 利用URL中的hash(#)
+    2. 利用History interface在 html5中新增的方法
+    mode参数来决定采用哪种方式：
+        默认hash
+        history
+        如果不在浏览器环境，则使用abstract（node 环境下）
+    程序会根据你选择的 mode类型创建不同的 history对象： HashHistory，HTML5History，AbstractHistory
+    HashHistory.push() 将新路由添加到浏览器访问历史的栈顶
+        解析过程： $router.push() // 调用方法 - HashHistory.push() // 设置hash，并添加到栈顶（window.location.hash = xx) -
+        History.transitionTo() // 监测更新，更新则调用History.updateRouter - History.updateRouter() // 更新路由
+        { app._route = route } // 替换当前app路由 - vm.render() 更新视图
+    HashHistory.replace() 替换掉当前路由
+    HTML5History
+        History interface是浏览器历史记录栈提供的接口，通过back(), forward(), go()等方法，
+        我们可以读取浏览器历史记录栈的信息，进行各种跳转
+        HTML5开始增加了 pushState(), replaceState()
+        window.history.pushState(stateObject, title, URL(replaceState参数一样）)
+        stateObject: 当浏览器跳转到新的状态时，将触发popState事件，该事件将携带这个 stateObject的副本
+        title: 所添加记录的标题
+        URL: 所添加记录的URL
+     两种模式的比较
+        history.pushState() 相比于直接修改hash有以下优势
+            1. pushState设置的新URL可以是与当前URL同源的任意URL，而hash只能修改#后面的部分，故只可设置与当前同文档的 URL
+            2. pushState设置的新URL可以与 当前URL一模一样，这样也会把记录添加到栈中，而hash设置的新值必须与原来不一样
+            才会触发记录添加到栈中
+            3. pushState通过stateObject可以添加任意类型的数据到记录中，而hash只可添加短字符串
+            4. pushState可额外设置 title属性供后续使用
+
+// $nextTick实现原理
+    它可以在DOM更新完毕之后执行一个回调。有时候我们需要操作因数据变化而更新的DOM的时候，就需要把这个操作放到this.$nextTick中
+           执行过程： vue用异步队列的方式控制dom更新和 nextTick回调先后执行
+                     回调函数放入callback中等待执行，
+                     根据执行环境分别尝试采用
+                        promise，MutationObserver，setImmediate如果以上都不行则采用 setTimeout
+                     将执行函数放到微任务或者宏任务中，
+                     事件循环到了微任务或者宏任务，执行函数依次执行callbacks中的回调函数并移除，然后再开始下一次事件循环
+
+// Proxy只会代理对象的第一层，vue3是怎么处理这个问题的？
+    判断当前 reflect.get的返回值是否为Object，如果是则再通过 reactive方法做代理，这样就实现了深度观测
+    监测数组的时候可能触发多次 get/set，如何防止触发多次呢？
+        我们可以判断key是否为当前被代理对象target自身属性，也可以判断旧值与新值是否相等，只有满足以上两个条件之一，才有可能执行 trigger
+
+// data为什么是一个函数？
+    一个组件被复用多次的话，也就会创建多个实例，本质上，这些实例都来自同一个构造函数，如果data是对象的话，对象是引用类型，会影响到所有实例
+    所有为了保证组件不同的实例之间data不冲突，data必须是一个函数
+
+// v-model的原理？
+    v-model本质是一个语法糖，可以看成是 value + input 方法的语法糖，可以通过model属性的prop 和 event属性来进行自定义
+
+// vue模板编译原理？
+    简单来说就是 template转化为 render函数的过程
+    生成AST树
+    优化
+    codegen
+        首先解析模板，生成AST语法树，使用大量的正则表达式对模板进行解析
+        遇到标签，文本的时候都会执行对应的钩子进行相关处理
+        vue的数据是响应式的，但其实模板中并不是所有的数据都是响应式的，有一些数据首次渲染后就不会再变化，对应的DOM
+       也不会变化，那么优化过程就是深度遍历AST树，按照相关条件对树节点标记，这些被标记的节点（静态节点）我们就可以跳过对它们的比对
+        对运行时的模板起到很大的优化作用
+        编译的最后一步是将优化后的AST树转换为可执行的代码
+
+// diff算法？
+    同级比较，再比较子节点
+        先比较一方有子节点一方没有子节点的情况（如果新的children没有子节点，将旧的子节点移除）
+        比较都有子节点的情况（核心diff）
+            递归比较子节点，只有当新旧children都为多个子节点时才需要用核心的Diff算法进行同层级比较
+            vue2的diff采用了双端比较的算法，同时从新旧 children的两端开始比较，借助key值找到可复用的节点，再进行相关操作
+
+// SSR
+    ssr也就是服务端渲染，也就是将vue在客户端把标签渲染成HTML的工作放在服务端完成，然后再把html直接返回给客户端
+     ssr有着更好seo，并且首屏加载速度更快等优点，不过它也有一些缺点，比如我们的开发条件会受到限制
+
+// 生命周期钩子
+    beforeCreate 组件实例创建之初，属性未绑定
+        initState前后，initState是绑定属性的过程
+    created 组件实例已经完全创建，属性也已绑定，真实dom未生成，$el不可用
+    beforeMount 挂载开始之前被调用，相关的render函数首次被调用
+    mounted el被新创建的$el替换，模板编译完成，数据挂载完毕
+    beforeUpdate 组件更新前，数据更新了，但是组件中的dom内容没变
+    updated 组件更新后
+    actived keep-alive组件激活时调用
+    deactived kee-alive组件停用时调用
+    beforeDestory 组件销毁前调用
+    destoryed 组件销毁后调用
+    // 父子组件调用顺序
+        加载渲染过程：
+            父 beforeCreate - created - beforeMount 子 beforeCreate - created - beforeMount - mounted 父 mounted
+        更新过程
+            父 beforeUpdate 子beforeUpdate - updated 父 updated
+        销毁过程
+            父 beforeDestory - 子 beforeDestory - destoryed - 父destoryed
+    // 路由导航守卫
+        全局路由守卫
+            router.beforeEach router.afterEach
+        路由独享守卫
+            beforeEnter
+        组件内的守卫
+            beforeRouterEnter  beforeRouterUpdate  beforeRouterLeave
+            beforeRouterEnter 因为进入页面前组件实例还未创建，无法获取实例this
+            可以通过给next传入回调来访问组件实例
+
+// 双向数据绑定的原理
+    数据劫持 + 发布订阅模式
+        Object.defineProperty()来劫持各个属性的getter，setter。数据变动发布消息给订阅者，触发相应的监听回调
+        Observer（观察者）对data中的每个属性进行数据劫持和监听
+           并为每个属性创建一个Dep对象，Dep对象中有一个该对象的所有订阅者组成的数组，这样就可以知道该属性都有谁在使用
+        Compile （编译器）将页面子节点拷贝到DocumentFragment（文档片段接口，一个没有父对象的最小文档对象。
+            不是真实dom树的一部分，它的变化不会触发dom树的重新渲染）对象中， 然后对每个元素节点的指令进行解析
+        解析指令时，会回调需要展示的属性的get方法，为每条指令创建一个Watcher实例，
+            内部会将订阅者实例添加到对应的Dep订阅者数组中
+        当监听到属性的值发生变化的时候，就调用set方法将新的值赋给旧值，并且调用dep.notify()方法，遍历该Dep对象中的订阅者数组
+        使得每个订阅者调用update()方法，对视图进行更新
+
+// 为什么要在 v-for中加入 key
+    使用v-for更新已渲染的元素列表中，默认就地复用，根据key值去判断某个值是否修改，如果修改重新渲染，否则复用之前的，
+    virtualDom也是 根据key值来作为节点的唯一标识。
+
+/*      Webpack相关
+// loader 和 plugin的区别是什么
+    loader是用来解析非js文件的，因为webpack原生只能解析js文件
+        将一个文件以字符串的形式读入，对其语法进行分析及转换，然后交由下一环节进行处理，所有载入的模块最终都会经过moduleFactory
+        处理，转成js可以识别和运行的代码，从而完成模块的集成。
+            loader支持链式调用，所以开发上需要严格遵守 单一职责 原则，即每个loader只负责自己需要负责的事情，将输入信息进行处理，
+           输出为下一个loader可识别的格式
+    plugin是用来给webpack扩展功能的，可以加载很多插件
+        原理: 我们在使用plugin时，一般都是 new plugin()的方式调用，所以plugin应该是一个类，类里面要实现一个
+            apply方法，接收一个compiler作为参数，这个compiler是webpack的实例，在apply方法执行时，可以操作
+            webpack打包时的各个时间节点（hooks,即生命周期钩子）
+
+// webpack热更新原理
+    HMR 不需要刷新浏览器就可以进行新旧模块的替换
+    1. webpack 监听到文件变更，重新打包编译，webpack-dev-server和 webpack进行接口交互
+    2. 通过socket.js在浏览器端和 服务器端建立一个 webSocket长连接，将webpack打包的各个阶段告知浏览器端
+    3. 浏览器端根据 webpack-dev-server/client传过来的信息和 dev-server的配置决定是热更新还是刷新浏览器
+        热更新则继续进行，否则刷新浏览器
+    4. HotModuleReplacement.runtime 是热更新的核心，根据上面传来的hash值，使用 JsonpMainTemplate.runtime向server端
+        发送ajax请求，服务端会返回一个 json文件，包含所有要更新模块的hash值，获取更新列表后，再通过 Jsonp请求获取到
+        最新的模块代码
+    5. HotModulePlugin 将对新旧模块进行对比，来决定是否更新模块
+    6. HMR失败后，回退到 live reload，即进行浏览器刷新
+
+// webpack打包原理
+    从配置文件和 shell语句中读取与合并参数，得到最终的参数
+    初始化 compiler对象，加载所有配置的插件，调用对象的run方法开始进行编译
+    从入口文件出发，调用所有配置的loader对模块进行编译，再找出该模块依赖的模块，递归本步骤，直到所有入口依赖的文件
+    都经过了本步骤的处理
+    根据入口和模块之间的依赖关系，组装成一个个包含多个模块的Chunk，再把每个chunk转化成一个单独的文件加入到输出列表，
+    确定好输出内容后，根据配置确定输出的文件名和路径，把文件写入到文件系统
+    以上过程中，webpack会在特定的时间点广播出特定的事件，插件在监听到感兴趣的事件后会执行特定的逻辑，
+        并且插件可以调用webpack提供的api改变webpack的运行结果
+/*      优化相关
+/*      工程化相关
+// 主流模块规范
+    1. UMD AMD + commonjs + 全局变量的组合规范
+    2. commonjs规范
+        module.exports = {} 整体导出， require 导入
+        module.exports.xx = xx 导出单个的
+        exports.xx = xx 只能导出单个的  exports = {}会改变默认 exports = module.exports的指向
+    3. es6 module规范
+        export default 导出 import 导入
+        export default 仅能有一个， export 可以多个
+    命名导出： exports.LinkList 或者 es6中的 export class LinkList
+    commonjs和 es6 module区别：
+       1 commonjs 输出的是值的拷贝，es6 module 输出的是值的引用
+            commonjs 一旦输出了某个值，模块内容的后续改变不会影响外部对其的引用
+            es6 module，js引擎对脚本进行静态分析的时候，遇到模块加载命令import，就会生成一个只读引用，
+            待脚本真正执行的时候，再根据这个只读引用到模块里去取值
+       2 commonjs运行时加载，是一个对象
+         es6 module编译时加载，是一个代码块，这样我们就可以用各种工具对js模块进行依赖分析，代码优化
+         由于加载机制的不同，所以对于循环加载的表现也不同
+       3 commonjs中的this指向当前模块，es6 module中this 指向 undefined
+/*      css相关
+/*      js相关
+
+// CDN
+    即内容分发网络，CDN是构建在网络之上的内容分发网络，依靠部署在各地的边缘服务器，通过中心平台的负载均衡，
+    内容分发，调度等功能模块，使用户就近获取所需内容，降低网络拥塞，提高用户访问响应速度和命中率，主要有内容存储和分发技术
+        内容存储技术：
+            需要考虑两个方面的内容存储问题，一个是内容源的集中存储，另一个是内容在cache节点中的分布式存储。由于内容的规模比较大，
+            内容的吞吐量比较大，因此通常采用海量存储架构，目前采用的存储技术主要有，直连附加存储DAS，网络附加存储NAS 和存储区域网SAN
+
+        内容分发技术：
+            通过网络的构建减小ip骨干网络的传输压力，将连接到ip网络上的内容迅速分发到用户中端。 CDN主要由初始服务器，分布在边缘的缓存服务器，
+            重定向DNS服务器和内容交换服务器组成。初始服务器负责生成服务器信息内容；缓存服务器负责存储初始服务器的部分或全部信息内容，重定向
+            DNS服务器向用户提供最近的服务器ip地址，减轻骨干网的压力；内容交换服务器完成各缓存服务器之间的负载均衡功能；内容管理服务器负责整
+            个网络各缓存服务器中存储的内容的管理，为各缓存服务器制定相应的缓存策略，以提高缓存服务器的服务质量
+            1. 分段分发技术  2. 部分分发技术
+        负载均衡技术：
+            负载均衡技术是整个CDN的核心，负载均衡的准确性和效率决定了整个CDN的效率和性能
+            将网络的流量尽可能均匀地分配到几个能完成相同任务的服务器或网络节点上进行处理，避免部分网络节点过载而另一部分节点空闲的不利状况
+            既可以提高网络流量，又可以提高网络的整体性能
+
+// tree-shaking 原理
+    ES6 module引入进行静态分析，故而编译的时候正确判断到底加载了哪些模块
+    静态分析程序流，判断哪些模块和变量未被使用或者引用，进而删除对应代码
+
+// 为什么离职？
+    从刚进公司到现在，差不多一年半的时间，大大小小的项目也做了不少，期间过的也很充实，但是小公司在管理和技术规范上都存在不足
+    考虑到长远的发展，还是想看看别的机会，希望能和更多更优秀的人一起共事
+// 涨薪幅度高?
+    其实前几天有跟老板聊过想要换工作的事，老板想要我留下来，还说要给我涨一部分工资，但是考虑到长远的发展，我没有答应。
+    还有就是我手里面已经有32w的offer了。
+    通过这两次的面试，咱们团队给我一个比较深的感受就是，大家对于技术都很有热情，这和我本身的追求比较接近，我还是蛮喜欢咱们公司的氛围的，做的事情我也
+    很喜欢，我更看重团队，总包这块我其实不是特别在意。我还是很希望能加入咱们公司，和大家一起共事的。
+
+// js代码是如何执行的?
+    编译器和解释器
+        计算机不能直接理解高级语言，只能直接理解机器语言，所以需要将高级语言翻译成机器语言，计算机才能执行高级语言编写的程序
+        根据执行流程，可以分为编译型语言和解释型语言：
+            编译型语言：程序在执行之前需要进行编译，运行时不需要重新编译。程序执行效率高，依赖编译器，跨平台性差
+            如 C， C++， go等
+            解释型语言：程序不需要编译，程序在运行时才翻译成机器语言（所以执行前需要现安装了解释器），每执行一次都要翻译一次，
+            因此效率比较低，依赖解释器，跨平台性好
+    抽象语法树
+    字节码和机器码
+        字节码：是一种包含执行程序，由一系列op代码/数据对组成的二进制文件。字节码是一种中间码，它比机器码更抽象
+        机器码：计算机直接使用的抽象语言，其语句就是机器指令码，机器指令码是用于指挥计算机应做的操作和操作数地址的一组二进制数
+    js代码执行的流程：
+        js - 词法分析 -> 词法单元（token）- 语法分析 -> 抽象语法树（AST）- 解释 -> 字节码 -> 机器码
+
+// 线程和进程
+    主要差别在于不同系统中的资源管理方式
+    进程是资源分配的基本单位，有独立的地址空间，一个进程崩溃后不会对其他进程产生影响
+    线程是进程中的一个执行路径，是进程的一个实体，是cpu调度和分派的基本单位，他是比进程更小的能独立运行的基本单位
+    它可与同属一个进程的其他线程共享进程所拥有的全部资源
+    一个线程死掉就等于整个进程死掉

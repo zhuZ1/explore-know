@@ -41,3 +41,11 @@ Person.prototype.sayName = function () {
 
 let person = new Person('小明', 20)
 person.sayName()
+
+// new操作符会进行如下操作
+/*
+  1. 创建一个新的空对象
+  2. 链接该对象（设置constructor）到另一个对象
+  3. 将新对象作为this的上下文
+  4. 如果该函数没有返回对象, 则返回this
+* */

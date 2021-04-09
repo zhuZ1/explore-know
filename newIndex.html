@@ -7,35 +7,55 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        .parent-par{
-            width: 100px;
-            height: 100px;
-            position: absolute;
-        }
         .parent{
-            position: relative;
-            background-color: palevioletred;
-            width: 100px;
-            height: 100px;
-            margin-top: 60px;
+            width: 100%;
+            height: 200px;
+            background-color: pink;
         }
-        .child{
-            position: absolute;
-            top: 0px;
-            width: 20px;
-            height: 20px;
-            background-color: rebeccapurple;
-        }
-
     </style>
 </head>
 <body>
-<div class="parent-par">
-    <div class="parent">
-        <div>小白</div>
-        <div class="child"></div>
-    </div>
-</div>
+<div class="parent"></div>
+<script>
+    let count = 1
+    const parent = document.querySelectorAll('.parent')[0]
+    function throttled(fn, delay) {
+      var timeout = null
+      return function () {
+        var that = this, args = arguments
+        if(!timeout){
+          timeout = setTimeout(function () {
+            fn.apply(that, args)
+            clearTimeout(timeout)
+            timeout = null
+          }, delay)
+        }
+      }
+    }
+    function debounce1(func, wait, immediate) {
+      var timout, result
+      return function () {
+        var that = this, event = arguments
+        if(timout) clearTimeout(timout)
+        if(immediate){ // 立即执行
+          var callNow = !timout
+          timout = setTimeout(()=>{
+            timout = null
+          }, wait)
+          if(callNow) result = func.apply(that, event)
+        } else {
+          timout = setTimeout(()=>{
+            func.apply(that, event)
+          }, wait)
+        }
+        return result
+      }
+    }
+    parent.onmousemove = debounce1(function () {
+      this.innerHTML = count++
+      // console.log(count)
+    }, 2000, true)
+</script>
 
 </body>
 </html>

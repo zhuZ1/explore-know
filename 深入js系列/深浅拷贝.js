@@ -10,7 +10,7 @@
 
 // 浅拷贝的实现：
 var shallowCopy = function(obj){
-  if(typeof obj !== 'object') return
+  if(typeof obj !== 'object') return obj
   // 根据obj对象类型决定是 新建 一个数组还是对象
   var newObj = obj instanceof Array? []: {}
   for(var key in obj){
@@ -24,7 +24,7 @@ var shallowCopy = function(obj){
 // 深拷贝的实现
 // 在拷贝的时候判断一下属性值的类型，如果是对象，递归调用深拷贝方法
 var deepCopy = function(obj) {
-  if(typeof obj !== 'object') return
+  if(typeof obj !== 'object') return obj
   if(Object.prototype.toString.call(obj)==='[object Null]') return null
   var newObj = obj instanceof Array? []: {}
   for(var key in obj){
@@ -37,3 +37,4 @@ var deepCopy = function(obj) {
 // 作用： 合并两个或多个对象的内容到第一个对象中
 // jq.extend(target, [obj1] ... [objN])
 // 进行深层次的拷贝 jq.extend([deep], target, [obj1] ... [objN])
+

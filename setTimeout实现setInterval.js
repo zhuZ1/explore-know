@@ -19,7 +19,7 @@ setMyInterval(()=>{
 }, 1000)
 
 
-setTimeout(()=>{
-  setMyInterval.clear()
-}, 5000)
+// setTimeout(()=>{
+//   setMyInterval.clear()
+// }, 5000)
 

@@ -26,26 +26,28 @@ class MyPromise {
       this._reject(err)
     }
   }
-  // 添加resovle时执行的函数
+  // 添加resolve时执行的函数
   _resolve (val) {
     const run = () => {
       if (this._status !== PENDING) return
       // 依次执行成功队列中的函数，并清空队列
       const runFulfilled = (value) => {
         let cb;
-        while (cb = this._fulfilledQueues.shift()) {
+        while (this._fulfilledQueues.length > 0) {
+          cb = this._fulfilledQueues.shift()
           cb(value)
         }
       }
       // 依次执行失败队列中的函数，并清空队列
       const runRejected = (error) => {
         let cb;
-        while (cb = this._rejectedQueues.shift()) {
+        while (this._fulfilledQueues.length > 0) {
+          cb = this._rejectedQueues.shift()
           cb(error)
         }
       }
       /* 如果resolve的参数为Promise对象，则必须等待该Promise对象状态改变后,
-        当前Promsie的状态才会改变，且状态取决于参数Promsie对象的状态
+        当前Promise的状态才会改变，且状态取决于参数Promise对象的状态
       */
       if (val instanceof MyPromise) {
         val.then(value => {
@@ -246,3 +248,5 @@ console.log('end')
 //   }
 // )
 // console.log('end')
+
+

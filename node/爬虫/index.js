@@ -1,9 +1,7 @@
-const Koa = require('koa')
-const app = new Koa()
-//
 
 //加载https模块, 只要是获取网站链接都需要的操作
 const https = require('https')
+const http = require('http')
 const path = require('path')
 //加载之前下载的cheerio,在后面会有作用
 const cheerio = require('cheerio')
@@ -15,7 +13,7 @@ const template = require('art-template') // 模板引擎
 let allFilms = []
 
 //通过https模块的get方法,请求 如下的网站链接,回调函数中 res就是请求所获取的资源
-https.get('https://movie.douban.com/top250',function(res){
+https.get('https://movie.douban.com/top250', function(res){
   // 由于获取的资源是分段返回的 我们需要自己拼接,因此创建一个空字符串用于拼接
   let html = ''
   // res.on类似于addEventListener,只不过这个监听的是data,
@@ -26,7 +24,7 @@ https.get('https://movie.douban.com/top250',function(res){
   // 监听只要res数据加载完成,那么我们就执行下面的回调函数
   res.on('end',function(){
     //这个时候就用到了cheerio,是我们可以使用dom操作
-    const $ = cheerio.load(html)  //$是 cherrio 规定的
+    const $ = cheerio.load(html)  //$是 cheerio 规定的
     //用该数组存放我们爬取的数据
 
     $('li .item').each(function(){
@@ -37,18 +35,29 @@ https.get('https://movie.douban.com/top250',function(res){
       const pic = $('.pic img',this).attr('src')
       // 存成一个 json 文件 fs
       allFilms.push({title,star,pic})
-      // console.log('爬取的数据', allFilms)
+      console.log('爬取的数据', allFilms)
+
     })
 
   })
 })
-app.use(async(ctx)=>{
-  let url = ctx.request.url
+http.createServer(function (req,res) {
+  //读取页面文件
 
-  if(url == '/list'){
-    ctx.response.body = allFilms
-  }
-})
+    // res.end('123')
+    fs.readFile(path.join(__dirname, "view.html"), function (err, data) {
+      if (err)
+        throw err;
+      if(req.url=='/list'){
+        let rest = template.render(data.toString(), {
+          title: "电影评分信息",
+          data: allFilms
+        });
+        res.end(rest);
+      }
 
-app.listen( 3000)
-console.log('Server is running at http://127.0.0.1:3000/')
+    })
+
+}).listen(3000, function () {
+    console.log('Server is running at http://127.0.0.1:3000/')
+  })

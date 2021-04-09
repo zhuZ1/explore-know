@@ -1,0 +1,96 @@
+项目名	            分支
+                   	beiyou	        北邮
+	                chongqingyike	青梅集
+	                dlwgy	        大连外国语大学
+	                dwjm	        对外经贸
+	                heNanDaXue	    河南大学
+	                hnlg	        河南理工大学
+	                huNan	        湖南大学
+qmjm_donate_dlwgy	huabei	        华北水利水电大学
+  H5捐赠            hunan-normal	湖南师范大学
+	                shanke	        陕西科技大学
+	                tiedao	        铁道大学
+	                wenzUni	        温州大学
+	                xian_oil	    西安石油大学
+	                xibei	        西北大学
+	                xinjiang_AU	    新疆农业大学
+	                xiwai	        西安外国语大学
+	                yanAndaxue	    延安大学
+
+
+qmjm_beiyou     	master	        北邮
+  H5                chongqingyike   重庆医科大学
+                    heNanUni        河南大学
+                    shaanxi_ST      陕西科技大学
+                    yanAndaxue      延安大学
+
+qmjm_hnlg     	    master	        河南理工大学
+  H5                wenzUni         温州大学
+                    dalianUni       大连外国语大学
+
+qmjm_xbnlkj     	master	        西北农林科技大学
+  H5                xian_oil        西安石油大学
+                    xinjiang_AU     新疆农业大学
+
+qmjm_xibei          master          西北大学
+
+                   	master	        上海外国语大学
+	                green-bd    	青梅集
+	                huNan	        湖南大学
+qmjm_standard   	huabei	        华北水利水电大学
+  H5                hunan-normal	湖南师范大学
+	                shanke	        陕西科技大学
+	                tiedao	        铁道大学
+	                xiwai	        西安外国语大学
+	                zhongguoxiqu	中国戏曲大学
+	                zhongguozf      中国政法大学
+
+
+
+
+
+
+
+	                bdmain	        北京大学
+	                beihang	        北航
+	                beili	        北理
+	                beiwai	        北外
+	                bj-health	    北京卫生职业技术学院
+mini-qmj	        bj-jiaotong	    北京交通大学
+小程序	            bj-normal	    北师大
+	                bj-science	    北京科技大学
+	                dalian-s&e	    大连理工大学
+	                huizhou-uni	    惠州学院
+	                nongda	        中国农业大学
+	                test	        青梅集（公司测试版本）
+	                test-domain	    旧的青梅集
+	                tj-normal	    天津大学
+
+mini-other	        SUSTech	        南方科技大学
+
+mini-live           beida           北京大学
+直播小程序           master          青梅集
+
+book-turn                           翻书
+turn-jq                             翻书动效
+avatar-list                         头像合成
+group-photo                         云合影
+canvas-danmu                        庆典飞图
+cloud-photo                         旧版云合影
+qmjm3                               农大旧版h5校友平台
+mourning-web                        学校悼念web端
+schoolCelebration-H5                校庆集合页
+cloudBless-H5                       云祝福
+
+bupt_foundation     master          北邮
+pc基金会            yanan           延安大学
+                    hunan-normal    湖南师范大学
+
+alumin_network      master          西北大学
+pc校友网            beiyou	        北邮
+                    chqyike	        青梅集
+                    hnlg	        河南理工大学
+                    hunan-normal	湖南师范大学
+                    tiedao	        铁道大学
+                    yanan	        延安大学
+                    shangwai        上海外国语大学

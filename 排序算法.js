@@ -141,7 +141,7 @@ function merge(left, right) { // 判断，合并
       result.push(right.shift())
     }
   }
-  return result.concat(left).concat(right)
+  return result.concat(left, right)
 
 }
 
@@ -212,42 +212,6 @@ function heapSort(arr) {
 
 console.log('堆排', heapSort(arr))
 
-
-// 理解 冒泡排序
-let newArr = [3, 4, 1, 2]
-// 每一轮都可以确定一个 无序数列里的 最大数
-// 3轮循环，比较次数 3， 2，1
-
-let len = newArr.length
-for(let i = 0; i < len - 1; i++){
-  let done = true
-  for(let j = 0; j < len - 1 - i; j++){
-    if(newArr[j] > newArr[j+1]){  // 当前数 > 后一位上的数
-      let temp = newArr[j+1]  // 暂存小数
-      newArr[j+1] = newArr[j]
-      newArr[j] = temp  // 小数和当前数交换位置，大数被移到后面
-      done = false
-    }
-  }
-  if(done){
-    break
-  }
-
-}
-console.log(newArr)
-// 选择排序
-for(let i = 0; i < len-1; i++){
-  let midIndex = i  // 用来存放当前循环最小值的index, 默认是 初始值
-  for(let j = i + 1; j < len; j++){  // 遍历待排序的数列
-    // 找出最小值
-    if(arr[j] < arr[midIndex]){
-      midIndex = j  // 记录最小值的 index
-    }
-  }
-  let temp = arr[i]
-  arr[i] = arr[midIndex]
-  arr[midIndex] = temp
-}
 
 
 

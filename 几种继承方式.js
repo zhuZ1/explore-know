@@ -1,7 +1,7 @@
 // 首先定义一个父类
 
-function Animal(name) {
-  this.name = name
+function Animal() {
+  this.name = 'Animal'
   this.sleep = function () {
     console.log(this.name + '正在睡觉')
   }
@@ -72,8 +72,8 @@ function Dog2(name, age) {
 }
 Dog2.prototype = Object.create(Animal.prototype)
 Dog2.prototype.constructor = Dog2
-
 // es5最完美的继承方法，解决了组合继承中调用两次父类构造函数的问题
+
 
 // 5. es6继承
 class Person {
@@ -100,3 +100,4 @@ let m1 = new Man('小红', 18, 'girl')
 console.log(m1.name, m1.age, m1.male)
 m1.sayHello()
 m1.showName()
+

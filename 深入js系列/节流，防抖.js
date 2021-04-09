@@ -68,8 +68,10 @@ function debounce(func, wait, immediate){
 // 某些代码不能在没有间断的情况下连续重复执行，第一次调用函数，创建一个定时器，在指定的时间间隔后运行代码，
 // 第二次调用时，会清除前一次的定时器并设置另一个（持续触发事件，每 n 秒执行一次）
 // 一种是时间戳， 一种是定时器
+// leading: false 表示禁用第一次执行
+// trailing: false 表示禁用停止触发的回调
 function throttle(func, wait, options) {
-  var timeout, that, args, result
+  var timeout, that, args
   var previous = 0
   if(!options) options = {}
 
@@ -105,4 +107,32 @@ function throttle(func, wait, options) {
   }
 
   return throttled
+}
+
+
+// 防抖  触发事件，在一定的时间之后才会执行 重复触发，延迟时间更新
+function debounced(fn, delay) {
+  var timeout
+  return function () {
+    var that = this, args = arguments
+    clearTimeout(timeout)
+    timeout = setTimeout(function () {
+      fn.apply(that, args)
+    }, delay)
+  }
+}
+
+// 节流 重复触发事件，一段时间内只执行一次事件
+function throttled(fn, delay) {
+  var timeout = null
+  return function () {
+    var that = this, args = arguments
+    if(!timeout){
+      timeout = setTimeout(function () {
+        fn.apply(that, args)
+        clearTimeout(timeout)
+        timeout = null
+      }, delay)
+    }
+  }
 }

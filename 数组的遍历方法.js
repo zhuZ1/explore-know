@@ -94,14 +94,13 @@ try {
       throw new Error('break')
     }
     newArr.push(item)
-    console.log(newArr)
+    console.log('跳出', newArr)
   })
 
 } catch (e) {
     console.log('跳出来')
   }
 
-  console.log('new')
 
 
 // for...in 循环遍历对象自身的和继承的可枚举属性

@@ -101,7 +101,7 @@ Function.prototype.newApply = function(obj, arr){
   } else {
     let len = arr.length, args = []
     for(let i = 0; i < len; i++){
-      args.push('arguments[' + i + ']')
+      args.push('arr[' + i + ']')
     }
     result = eval('obj.fn(' + args + ')')
   }
@@ -175,7 +175,7 @@ f3()
 
 
 // 扁平化并去重， 得到一个升序的数组
-// console.log( JSON.stringify( flatten([1, 9, [4, [6, 7], 8], [9, 6], [1, [3, 2, [5] ] ] ] ) ) ) // => [1,2,3,4,5,6,7,8,9]
+// console.log( '结果', JSON.stringify( flatten([1, 9, [4, [6, 7], 8], [9, 6], [1, [3, 2, [5] ] ] ] ) ) ) // => [1,2,3,4,5,6,7,8,9]
 let arr = [1, 9, [4, [6, 7], 8], [9, 6], [1, [3, 2, [5] ] ] ]
 function flatten(arr) {
  let newArr = arr.toString().split(',').map(item=> +item)
@@ -184,4 +184,6 @@ function flatten(arr) {
   return [...set].sort((a, b)=>a-b)
 }
 console.log(flatten(arr))
+
+
 

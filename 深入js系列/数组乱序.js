@@ -23,8 +23,10 @@ function shuffle(a) {
 // es6的写法
 function shuffleEs6(a) {
   for(let i = a.length; i; i--){
-    let j = Math.floor(Math.random() * i)
+    let j = Math.floor(Math.random() * i);
     [a[i-1], a[j]] = [a[j], a[i-1]]
   }
+  return a
 }
+console.log(shuffleEs6(values))
 

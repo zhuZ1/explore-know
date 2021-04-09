@@ -152,10 +152,10 @@ function find(str, word) {
   let i = 0, j = 0
   while(j < str.length){
     if(word[i] === str[j]){
-      i++ // 这里相当于 遇到一个相同的元素就计一次数
+      i++ // 相同则比较下一个字符
       j++
     } else {
-      j++
+      j++ // 不等则 跟str的下一个字符进行比较
     }
   }
   return i === word.length  // 最后返回 i=== word.length 判断是否 word的所有元素都包含在str中
@@ -163,5 +163,22 @@ function find(str, word) {
 
 console.log(find('word', 'ed'))
 
+// 剑指offer21
+  var exchange = function (nums) {
+    let left = 0, right = nums.length - 1
+    while(left < right){
+      if(nums[left] % 2){ // 奇数
+        // 记录这个索引
+        left ++
+      } else{
+        [nums[left], nums[right]] = [nums[right], nums[left]]
+        right--
+      }
+    }
+    return nums
+  }
+  let arr = [3, 2, 1, 4, 6, 11, 9, 8]
+console.log(exchange(arr))
 
 // 此篇结于 2020/11/20
+

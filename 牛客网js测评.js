@@ -27,7 +27,7 @@ function remove(arr, item) {
 }
 
 let arr1 = [1, 2, 3, 4, 2], item1 = 2
-console.log(remove(arr1, item1))
+// console.log(remove(arr1, item1))
 
 let a1 = [1, 2, 3, 4], a2 = ['a', 'b', 'c', 1]
 function concat(arr1, arr2) {
@@ -37,7 +37,7 @@ function concat(arr1, arr2) {
 }
 console.log(concat(a1, a2), a1, a2)
 
-// 元素重复出现过的元素
+// 重复出现过的元素
 function duplicates(arr) {
   let temp = []
   for(let i=0;i<arr.length;i++){
@@ -53,15 +53,6 @@ function duplicates(arr) {
 let test = [1, 2, 4, 4, 3, 3, 1, 5, 3]
 console.log('重复元素', duplicates(test))
 
-function square(arr) {
-  let newArr = arr.map(item=>{
-    return item * item
-  })
-  return newArr
-}
-
-let ar = [2, 3]
-console.log(square(ar), ar)
 
 // 查找元素出现的所有位置, 保存在数组中
 function findAllOccurrences(arr, target) {
@@ -86,7 +77,7 @@ function functions(flag) {
 
   return getValue();
 }
-let flag = false
+let flag = true
 console.log(functions(flag))
 
 // 判断val1 和 val2 是否完全等同
@@ -160,3 +151,51 @@ console.log(speak(fn1, onj))
 // 6再装满到进5 剩 2升 倒入 5
 // 6 再装满 倒进5 剩3升
 
+const data = [
+  { id: 10, parentId: 0, text: "一级菜单-1" },
+  { id: 20, parentId: 0, text: "一级菜单-2" },
+  { id: 30, parentId: 20, text: "二级菜单-3" },
+  { id: 25, parentId: 30, text: "三级菜单-25" },
+  { id: 35, parentId: 30, text: "三级菜单-35" }
+];
+
+function filterData(data){
+  let result = []
+  let map = {}
+  data.forEach(item => {
+    map[item.id] = item
+  })
+  console.log(data, map)
+  data.forEach(item => {
+    let parent = map[item.parentId]
+    console.log('parent', parent)
+    if(parent){
+      (parent.children || (parent.children = [])).push(item)
+    } else {
+      result.push(item)
+    }
+  })
+  return result
+}
+console.log('结果', filterData(data))
+
+let result = [
+  {
+    id: 10,
+    text: '一级菜单-1',
+    parentId: 0
+  },
+  {
+    id: 20,
+    text: '一级菜单-2',
+    parentId: 0,
+    children: [
+      {
+        id: 10,
+        text: '一级菜单-3',
+        parentId: 20,
+        // children: [...]
+      }
+    ]
+  }
+];

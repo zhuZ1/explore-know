@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="inputDom">
+    <p id="pDom"></p>
+    <script>
+        let input = document.getElementById('inputDom'), pDom = document.getElementById('pDom')
+        const user = {}
+        Object.defineProperty(user, 'inputValue', {
+          configurable: true,
+          get: function () {
+            return input.value
+          },
+          set: function (val) {
+            input.value = val
+            pDom.innerHTML = val
+
+          }
+        })
+        document.addEventListener('keyup', function (e) {
+          console.log(e)
+          user.inputValue = e.target.value
+        })
+        user.inputValue = 123
+    </script>
+</body>
+</html>
+
+
+<!--
+过程
+        数据劫持和 发布订阅模式
+        Observer  观察者 劫持监听所有属性  通知变化给订阅者 -> watcher 多个订阅者由 Dep统一管理
+        Compile  解析指令  将子节点复制拷贝到 DocumentFragment中   watcher为每个属性添加订阅者
+        数据变化执行回调，更新视图
+  -->

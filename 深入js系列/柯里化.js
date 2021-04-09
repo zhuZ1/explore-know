@@ -59,7 +59,7 @@ function curry2() {
   return inner
 }
 curry2((1),(2))
-// console.log(curry2(1)(2).toString())
+console.log(curry2(1)(2).toString())
 
 
 // sum函数，支持sum(1)(2)(3, 4)(5, 6, 7...)
@@ -67,3 +67,5 @@ curry2((1),(2))
 // console.log(sum(1))
 // console.log(sum(1)(2))
 // console.log(sum(1, 2)(3, 4)(5, 6))
+
+

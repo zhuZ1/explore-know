@@ -2,9 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>电影评分</title>
+    <meta name="referrer" content="never">
+    <title>{{title}}</title>
 </head>
 <body>
+{{each data as value index}}
+<p>{{value.title}} <span>{{value.star}}</span></p>
+<img src="{{value.pic}}" alt="">
 
+{{/each}}
 </body>
 </html>

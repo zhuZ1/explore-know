@@ -29,15 +29,7 @@ p.then(res=>{
   console.log('raceP err', err)
 })
 
-// all 如果其中的promise定义了catch方法，则不会影响到p的状态, 都是fulfilled， p才会会变成fulfilled， 有一个变成rejected， p就是rejected
-// race, p中有一个promise的状态发生改变，p的状态就跟着改变， 率先改变的promise实例结果会传递给p
 
-
-// 手写一个方法，结合all和race，所有都resolved/reject时才返回，并返回所有的结果  (即参数实例都返回结果, 包装实例才会结束, Promise.allSettled())
-// all 所有都是 resolved 返回 resolved ，有一个rejected，返回rejected
-// race 有一个发生改变就跟着改变，
-// promise.all 和 promise.race 实现 promise.allSettled
-// Promise.mySettled([])
 
 
 
@@ -140,7 +132,7 @@ myRace.then((v)=>{
 })
 
 // 实现 Promise.allSettled() 方法
-// 不管是不是resolve，只有有结果就返回
+// 不管是不是resolve，只要有结果就返回
 function myPromiseSettled(arr) {
   return new Promise((resolve, reject)=>{
     let result = [], promiseCount = arr.length
@@ -242,3 +234,66 @@ newP().then(()=>{
 // addTask(300, '3')
 // addTask(400, '4')
 
+// 实现promise.all()
+// 接收一个数组作为参数，参数可以不是数组，但要有 Iterator属性
+// p1, p2, p3都变成 fulfilled， p的状态才是 fulfilled， 返回值组成一个数组，返回给p的回调函数
+// 有一个变成rejected， p的状态就是 rejected，第一个reject的promise实例结果 返回给 p的回调函数
+function myAll(arr) {
+  let result = [], len = arr.length
+  return new Promise((resolve, reject)=>{
+    if(arr.length == 0) resolve(result)
+    for(let i = 0; i < len; i++){
+      Promise.resolve(arr[i]).then((val)=>{
+        result.push(val)
+        if(result.length == arr.length){
+          resolve(result)
+        }
+      }).catch((err)=>{
+        reject(err)
+      })
+    }
+  })
+}
+
+// 实现 promise.race()
+// 接收数组作为参数，有一个改变，p的状态就会改变，率先改变的promise实例结果会传递给 p
+function myPRace(arr) {
+  return new Promise((resolve, reject)=>{
+    for(let i of arr){
+      Promise.resolve(i).then(res=>{
+        resolve(res)
+      }).catch(err=>{
+        reject(err)
+      })
+    }
+  })
+}
+
+// 实现 promise.allSettled()
+// 不管是 fulfilled 还是rejected，只要有结果就返回，结果包含状态
+function mySettled(arr) {
+  return new Promise((resolve)=>{
+    let result = [], promiseCount = arr.length
+    for(let i = 0; i < arr.length; i++){
+      Promise.resolve(arr[i]).then(val=>{
+        result[i] = {
+          status: 'fulfilled',
+          val
+        }
+        promiseCount -= 1
+        if(promiseCount === 0){
+          resolve(result)
+        }
+      }).catch(err=>{
+        result[i] = {
+          status: 'rejected',
+          err
+        }
+        promiseCount -= 1
+        if(promiseCount === 0){
+          resolve(result)
+        }
+      })
+    }
+  })
+}
